@@ -11,7 +11,7 @@ const SignInScreen = ({ navigation, route }) => {
 
   const { isSignedIn, setIsSignedIn } = React.useContext(AuthContext);
 
-  const validateSignIn = () => {
+  const signIn = () => {
     setIsSignedIn(true);
   };
 
@@ -47,7 +47,7 @@ const SignInScreen = ({ navigation, route }) => {
         </View>
 
         <TouchableOpacity
-          onPress={() => validateSignIn()}>
+          onPress={() => signIn()}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>MASUK</Text>
           </View>
