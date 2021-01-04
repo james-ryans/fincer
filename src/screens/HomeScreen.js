@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 
 const HomeScreen = ({ navigation, route }) => {
   return (
-    <Text>default</Text>
+    <Text></Text>
   );
 };
 

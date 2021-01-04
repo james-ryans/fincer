@@ -2,62 +2,98 @@ import * as React from 'react';
 import { View, Text, Button, StyleSheet, Dimensions } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 const windowWidth = Dimensions.get('window').width;
 
 const SignUpScreen = ({ navigation, route }) => {
-  const [email, setEmail] = React.useState('');
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
-  const influencerSignUp = () => {
-    navigation.goBack();
-  };
-
-  const businessmanSignUp = () => {
-    navigation.goBack();
-  };
-
   return (
-    <View style={styles.form}>
-      <View style={styles.titlePos}>
-        <Text style={styles.title}>Fincer</Text>
-        <Text style={styles.titleDesc}>finding influencer</Text>
-      </View>
-
-      <TextInput
-        style={styles.textInput}
-        placeholder='E-mail'
-        placeholderTextColor='white'
-        onChangeText={email => setEmail(email)}/>
-
-      <TextInput
-        style={styles.textInput}
-        placeholder='Username'
-        placeholderTextColor='white'
-        onChangeText={username => setUsername(username)}/>
-
-      <TextInput
-        style={styles.textInput}
-        placeholder='Kata Sandi'
-        placeholderTextColor='white'
-        onChangeText={password => setPassword(password)}/>
-
-      <View style={styles.buttonView}>
-        <TouchableOpacity
-          onPress={() => influencerSignUp()}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>DAFTAR SEBAGAI INFLUENCER</Text>
+    <Formik
+      initialValues={{
+        email: '',
+        username: '',
+        password: '',
+        buttonState: '',
+      }}
+      validationSchema={Yup.object({
+        email: Yup.string()
+          .email('Invalid email address')
+          .required('Required'),
+        username: Yup.string()
+          .min(4, 'Must be at least 4 characters long')
+          .required('Required'),
+        password: Yup.string()
+          .min(8, 'Must be at least 8 characters long')
+          .required('Required')
+      })}
+      onSubmit={(values, actions) => {
+        actions.setSubmitting(false);
+        navigation.goBack();
+      }}
+    >
+      { formik => (
+        <View style={styles.form}>
+          <View style={styles.titlePos}>
+            <Text style={styles.title}>Fincer</Text>
+            <Text style={styles.titleDesc}>finding influencer</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => businessmanSignUp()}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>DAFTAR SEBAGAI PEBISNIS</Text>
+
+          <TextInput
+            style={styles.textInput}
+            placeholder='E-mail'
+            placeholderTextColor='white'
+            onChangeText={formik.handleChange('email')}
+            onBlur={formik.handleBlur('email')}
+            value={formik.values.email}/>
+          { formik.touched.email && formik.errors.email &&
+            <Text style={styles.errorText}>{ formik.errors.email }</Text>
+          }
+
+          <TextInput
+            style={styles.textInput}
+            placeholder='Username'
+            placeholderTextColor='white'
+            onChangeText={formik.handleChange('username')}
+            onBlur={formik.handleBlur('username')}/>
+          { formik.touched.username && formik.errors.username &&
+            <Text style={styles.errorText}>{ formik.errors.username }</Text>
+          }
+
+          <TextInput
+            style={styles.textInput}
+            placeholder='Kata Sandi'
+            placeholderTextColor='white'
+            secureTextEntry
+            onChangeText={formik.handleChange('password')}
+            onBlur={formik.handleBlur('password')}/>
+          { formik.touched.password && formik.errors.password &&
+            <Text style={styles.errorText}>{ formik.errors.password }</Text>
+          }
+
+          <View style={styles.buttonView}>
+          <TouchableOpacity
+              onPress={() => {
+                formik.setFieldValue('buttonState', 'INFLUENCER');
+                formik.handleSubmit();
+              }}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>DAFTAR SEBAGAI INFLUENCER</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                formik.setFieldValue('buttonState', 'BUSINESSMAN');
+                formik.handleSubmit();
+              }}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>DAFTAR SEBAGAI PEBISNIS</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-      </View>
-    </View>
+        </View>
+      )}
+    </Formik>
   )
 }
 
@@ -82,6 +118,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     fontSize: 14,
     color: '#FCAF58',
+  },
+  errorText: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: 14,
+    color: '#EA3C53',
   },
   textInput: {
     fontFamily: 'Montserrat-Regular',
