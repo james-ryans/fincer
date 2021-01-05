@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 
 import AuthContext from '../utils/authContext';
 
-import HomeScreen from './HomeScreen';
+import HomeScreen from './InfluencerScreen';
 
 const SignInScreen = ({ navigation, route }) => {
   const { isSignedIn, setIsSignedIn } = React.useContext(AuthContext);
@@ -26,8 +26,8 @@ const SignInScreen = ({ navigation, route }) => {
           .required('Required'),
       })}
       onSubmit={(values, actions) => {
-        setIsSignedIn(true);
         actions.setSubmitting(false);
+        setIsSignedIn(true);
       }}>
       {formik => (
         <View style={styles.container}>
