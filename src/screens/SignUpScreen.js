@@ -42,7 +42,7 @@ const SignUpScreen = ({ navigation, route }) => {
           <TextInput
             style={styles.textInput}
             placeholder='E-mail'
-            placeholderTextColor='white'
+            placeholderTextColor='#222832'
             onChangeText={formik.handleChange('email')}
             onBlur={formik.handleBlur('email')}
             value={formik.values.email}/>
@@ -53,7 +53,7 @@ const SignUpScreen = ({ navigation, route }) => {
           <TextInput
             style={styles.textInput}
             placeholder='Username'
-            placeholderTextColor='white'
+            placeholderTextColor='#222832'
             onChangeText={formik.handleChange('username')}
             onBlur={formik.handleBlur('username')}/>
           { formik.touched.username && formik.errors.username &&
@@ -63,7 +63,7 @@ const SignUpScreen = ({ navigation, route }) => {
           <TextInput
             style={styles.textInput}
             placeholder='Kata Sandi'
-            placeholderTextColor='white'
+            placeholderTextColor='#222832'
             secureTextEntry
             onChangeText={formik.handleChange('password')}
             onBlur={formik.handleBlur('password')}/>
@@ -102,7 +102,7 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   form: {
     flex: 2,
-    backgroundColor: '#4E598C',
+    backgroundColor: '#FFFFFF',
     padding: 40,
   },
   titlePos: {
@@ -112,12 +112,12 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 40,
-    color: '#FFFFFF',
+    color: '#222832',
   },
   titleDesc: {
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-SemiBold',
     fontSize: 14,
-    color: '#FCAF58',
+    color: '#FFAB8D',
   },
   errorText: {
     fontFamily: 'Montserrat-Regular',
@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontFamily: 'Montserrat-Regular',
-    backgroundColor: '#6B78AE',
-    color: 'white',
+    backgroundColor: '#F2F2F2',
+    color: '#222832',
     marginTop: 30,
     borderRadius: 15,
     padding: 10,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   button: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFAB8D',
     width: windowWidth / 2.8,
     padding: 12,
     borderRadius: 15,
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 10,
+    color: 'white',
     textAlign: 'center',
   },
 });

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, Button, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, Button, View, ImageBackground, Pressable } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { ErrorMessage, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -31,50 +31,50 @@ const SignInScreen = ({ navigation, route }) => {
       }}>
       {formik => (
         <View style={styles.container}>
-          <Image source={require('../assets/images/sign_in_image.png')} style={styles.background} />
-    
-          <View style={styles.form}>
-            <Text style={styles.title}>Fincer</Text>
-            <Text style={styles.titleDesc}>finding influencer</Text>
-    
-            <TextInput
-              style={styles.textInput}
-              placeholder='E-mail'
-              placeholderTextColor='white'
-              onChangeText={formik.handleChange('email')}
-              onBlur={formik.handleBlur('email')}
-              value={formik.values.email}/>
-            { formik.touched.email && formik.errors.email &&
-              <Text style={styles.errorText}>{ formik.errors.email }</Text>
-            }
-            
-            <TextInput
-              style={styles.textInput}
-              placeholder='Kata Sandi'
-              placeholderTextColor='white'
-              secureTextEntry
-              onChangeText={formik.handleChange('password')}
-              onBlur={formik.handleBlur('password')}
-              value={formik.values.password}/>
-            { formik.touched.password && formik.errors.password &&
-              <Text style={styles.errorText}>{ formik.errors.password }</Text>
-            }
-    
-            <View style={styles.centeredText}>
-              <Text style={styles.whiteText}>tidak memiliki akun? </Text>
-              <Pressable
-                onPress={() => navigation.navigate('SignUp')}>
-                <Text style={styles.orangeText}>ayo daftar</Text>
-              </Pressable>
-            </View>
-    
-            <TouchableOpacity
-              onPress={formik.handleSubmit}>
-              <View style={styles.button}>
-                <Text style={styles.buttonText}>MASUK</Text>
+          <ImageBackground source={require('../assets/images/sign_in_wallpaper.png')} style={styles.background}>
+            <View style={styles.form}>
+              <Text style={styles.title}>Fincer</Text>
+              <Text style={styles.titleDesc}>finding influencer</Text>
+      
+              <TextInput
+                style={styles.textInput}
+                placeholder='E-mail'
+                placeholderTextColor='#222832'
+                onChangeText={formik.handleChange('email')}
+                onBlur={formik.handleBlur('email')}
+                value={formik.values.email}/>
+              { formik.touched.email && formik.errors.email &&
+                <Text style={styles.errorText}>{ formik.errors.email }</Text>
+              }
+              
+              <TextInput
+                style={styles.textInput}
+                placeholder='Kata Sandi'
+                placeholderTextColor='#222832'
+                secureTextEntry
+                onChangeText={formik.handleChange('password')}
+                onBlur={formik.handleBlur('password')}
+                value={formik.values.password}/>
+              { formik.touched.password && formik.errors.password &&
+                <Text style={styles.errorText}>{ formik.errors.password }</Text>
+              }
+      
+              <View style={styles.centeredText}>
+                <Text style={styles.blackText}>tidak memiliki akun? </Text>
+                <Pressable
+                  onPress={() => navigation.navigate('SignUp')}>
+                  <Text style={styles.orangeText}>ayo daftar</Text>
+                </Pressable>
               </View>
-            </TouchableOpacity>
-          </View>
+      
+              <TouchableOpacity
+                onPress={formik.handleSubmit}>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>MASUK</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
       )}
     </Formik>
@@ -85,15 +85,17 @@ export default SignInScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   background: {
-    flex: 1.2,
+    flex: 1,
     width: '100%',
+    height: '50%',
+    justifyContent: 'flex-end',
   },
   form: {
-    flex: 2,
-    backgroundColor: '#4E598C',
+    height: '60%',
+    backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     padding: 40,
@@ -101,12 +103,12 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 40,
-    color: '#FFFFFF',
+    color: '#222832',
   },
   titleDesc: {
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'Montserrat-SemiBold',
     fontSize: 14,
-    color: '#FCAF58',
+    color: '#FFAB8D',
   },
   errorText: {
     fontFamily: 'Montserrat-Regular',
@@ -115,8 +117,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     fontFamily: 'Montserrat-Regular',
-    backgroundColor: '#6B78AE',
-    color: 'white',
+    backgroundColor: '#F2F2F2',
+    color: '#222832',
     marginTop: 30,
     borderRadius: 15,
     padding: 10,
@@ -126,17 +128,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 10,
   },
-  whiteText: {
+  blackText: {
     fontFamily: 'Montserrat-Regular',
-    color: 'white',
+    color: '#222832',
   },
   orangeText: {
     fontFamily: 'Montserrat-Regular',
-    color: '#FF8C42',
+    color: '#FF9B7D',
   },
   button: {
     marginTop: 15,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFAB8D',
     width: 207,
     alignSelf: 'center',
     alignItems: 'center',
@@ -146,5 +148,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
     fontSize: 16,
+    color: 'white',
   }
 });

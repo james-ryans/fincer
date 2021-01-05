@@ -59,6 +59,8 @@ const App = () => {
                   showLabel: false,
                   style: { 
                     height: 64,
+                    borderTopWidth: null,
+                    elevation: null,
                   }
                 }}>
                 <Tab.Screen name="Influencer" component={InfluencerScreen} />
