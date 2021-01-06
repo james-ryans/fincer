@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
     color: '#222832',
   },
   orangeText: {
-    fontFamily: 'Montserrat-Regular',
-    color: '#FF9B7D',
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#FFAB8D',
   },
   button: {
     marginTop: 15,

@@ -25,11 +25,13 @@ const styles = StyleSheet.create({
   container: {
     borderBottomWidth: null,
     backgroundColor: '#FFFFFF',
-    padding: 15,
+    paddingHorizontal: 24,
+    paddingVertical: 18,
   },
   inputContainer: {
     backgroundColor: '#F2F2F2',
-    minHeight: 20,
+    borderRadius: 10,
+    height: 40,
   },
   input: {
     fontSize: 16,
