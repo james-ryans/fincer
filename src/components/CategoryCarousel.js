@@ -11,10 +11,6 @@ const CategoryCarousel = (props) => {
 
   const [carouselRef, setCarouselRef] = React.useState(React.createRef());
 
-  React.useEffect(() => {
-    console.log(windowWidth); 
-  }, []);
-
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.card}>

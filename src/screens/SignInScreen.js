@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    padding: 40,
+    padding: 36,
   },
   title: {
     fontFamily: 'Montserrat-SemiBold',
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     backgroundColor: '#F2F2F2',
     color: '#222832',
-    marginTop: 30,
+    marginTop: 24,
     borderRadius: 15,
     padding: 10,
   },
