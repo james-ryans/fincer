@@ -38,6 +38,7 @@ const PremiumCarousel = (props) => {
         activeSlideAlignment="start"
         inactiveSlideOpacity={1}
         inactiveSlideScale={1}
+        contentContainerCustomStyle={styles.contentContainer}
         onSnapToItem={(index) => { setActiveIndex(index) }} />
         <Pagination
           dotsLength={carouselItems.length}
@@ -53,6 +54,9 @@ const PremiumCarousel = (props) => {
 export default PremiumCarousel;
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    marginLeft: 8,
+  },
   card: {
     flexDirection: 'row',
     backgroundColor: '#F2F2F2',
@@ -81,8 +85,10 @@ const styles = StyleSheet.create({
   paginationContainer: {
     alignSelf: 'flex-start',
     paddingVertical: 20,
+    paddingHorizontal: 0,
+    marginLeft: 32,
   },
   dotContainer: {
-    marginRight: 2,
+    marginLeft: 0,
   },
 });

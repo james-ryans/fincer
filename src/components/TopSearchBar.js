@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
   container: {
     borderBottomWidth: null,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 24,
-    paddingVertical: 18,
+    paddingHorizontal: 32,
+    paddingVertical: 20,
   },
   inputContainer: {
     backgroundColor: '#F2F2F2',
