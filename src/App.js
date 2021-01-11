@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { Button, StatusBar, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -12,11 +12,13 @@ import AuthContext from './utils/authContext';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import InfluencerScreen from './screens/InfluencerScreen';
+import InfluencerDetailScreen from './screens/InfluencerDetailScreen';
 import BrandScreen from './screens/BrandScreen';
 import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const InfluencerStack = createStackNavigator();
 
 const App = () => {
   const [isSignedIn, setIsSignedIn] = React.useState(false);
@@ -36,15 +38,15 @@ const App = () => {
                 screenOptions={({ route }) => ({
                   tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
-                    if (route.name === 'Influencer') {
+                    if (route.name === 'InfluencerTab') {
                       iconName = focused
                         ? 'people'
                         : 'people-outline';
-                    } else if (route.name === 'Brand') {
+                    } else if (route.name === 'BrandTab') {
                       iconName = focused 
                         ? 'briefcase-sharp' 
                         : 'briefcase-outline';
-                    } else if (route.name === 'Profile') {
+                    } else if (route.name === 'ProfileTab') {
                       iconName = focused
                         ? 'person-circle'
                         : 'person-circle-outline';
@@ -63,9 +65,20 @@ const App = () => {
                     elevation: null,
                   }
                 }}>
-                <Tab.Screen name="Influencer" component={InfluencerScreen} />
-                <Tab.Screen name="Brand" component={BrandScreen} />
-                <Tab.Screen name="Profile" component={ProfileScreen} />
+                <Tab.Screen 
+                  name="InfluencerTab"
+                  options={({ route }) => ({
+                    tabBarVisible: getFocusedRouteNameFromRoute(route) == 'InfluencerDetail' ? false : true,
+                  })}>
+                  {() => (
+                    <InfluencerStack.Navigator screenOptions={{ headerShown: false }}>
+                      <InfluencerStack.Screen name="Influencer" component={InfluencerScreen} />
+                      <InfluencerStack.Screen name="InfluencerDetail" component={InfluencerDetailScreen} />
+                    </InfluencerStack.Navigator>
+                  )}
+                </Tab.Screen>
+                <Tab.Screen name="BrandTab" component={BrandScreen} />
+                <Tab.Screen name="ProfileTab" component={ProfileScreen} />
               </Tab.Navigator>
             ) : (
               <Stack.Navigator screenOptions={{ headerShown: false }}>

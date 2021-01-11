@@ -82,7 +82,8 @@ const InfluencerScreen = ({ navigation, route }) => {
             return <CategoryCarousel 
               key={index}
               containerStyle={styles.categoryCarousel}
-              carouselItems={category} />
+              carouselItems={category}
+              navigation={navigation} />
           })
         }
       </View>

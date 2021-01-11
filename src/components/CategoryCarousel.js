@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Image, Dimensions, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -13,20 +13,23 @@ const CategoryCarousel = (props) => {
 
   const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.card}>
-        <Image
-          style={styles.cardImage}
-          source={{ uri: item.source }} />
-        <View style={styles.cardText}>
-          <Text
-            style={styles.cardTitle}
-            numberOfLines={1}>
-            {item.name}
-          </Text>
-          <Text style={styles.cardDesc}>{item.category}</Text>
-          <Text style={styles.cardLocation}>{item.province}, {item.city}</Text>
+      <TouchableWithoutFeedback
+        onPress={() => { props.navigation.navigate('InfluencerDetail') }}>
+        <View style={styles.card}>
+          <Image
+            style={styles.cardImage}
+            source={{ uri: item.source }} />
+          <View style={styles.cardText}>
+            <Text
+              style={styles.cardTitle}
+              numberOfLines={1}>
+              {item.name}
+            </Text>
+            <Text style={styles.cardDesc}>{item.category}</Text>
+            <Text style={styles.cardLocation}>{item.province}, {item.city}</Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 
