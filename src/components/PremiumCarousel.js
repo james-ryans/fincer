@@ -1,28 +1,35 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 const windowWidth = Dimensions.get('window').width;
 
 const PremiumCarousel = (props) => {
+  const { navigation } = props;
+
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [carouselItems, setCarouselItems] = React.useState(props.carouselItems);
 
   const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.card}>
-        <Image
-          style={styles.cardImage}
-          source={{ uri: item.source }} />
-        <View style={styles.cardText}>
-          <Text
-            style={styles.cardTitle}
-            numberOfLines={2}>
-            {item.name}
-          </Text>
-          <Text style={styles.cardDesc}>{item.category}</Text>
+      <TouchableWithoutFeedback
+        onPress={() => { navigation.navigate('InfluencerDetail', {
+          data: item,
+        }) }}>
+        <View style={styles.card}>
+          <Image
+            style={styles.cardImage}
+            source={{ uri: item.source }} />
+          <View style={styles.cardText}>
+            <Text
+              style={styles.cardTitle}
+              numberOfLines={2}>
+              { item.name }
+            </Text>
+            <Text style={styles.cardDesc}>{ item.subcategory }</Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     );
   };
 

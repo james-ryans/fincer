@@ -11,22 +11,38 @@ const InfluencerScreen = ({ navigation, route }) => {
     {
       source: 'https://katherinecalnan.com/wp-content/uploads/sb-instagram-feed-images/124804777_189531592673432_746234738064300489_nlow.jpg',
       name: 'Maria Rssds sdsds',
-      category: 'Fashion Model',
+      subcategory: 'Fashion Model',
+      province: 'DKI Jakarta',
+      city: 'Jakarta',
+      description: 'I am active in Instagram and a few facts about my account\:\nMost liked photo: 35900 likes10000-12000 likes per post (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+      price: 350000,
     },
     {
       source: 'https://starngage.com/wp-content/uploads/2019/05/1.-Magdalena.jpg',
       name: 'Sasa',
-      category: 'Food Blogger',
+      subcategory: 'Food Blogger',
+      province: 'DKI Jakarta',
+      city: 'Jakarta',
+      description: 'I am active in Instagram and a few facts about my account\:\nMost liked photo: 35900 likes10000-12000 likes per post (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+      price: 350000,
     },
     {
       source: 'https://www.onblastblog.com/wp-content/uploads/2017/08/how-to-become-a-lifestyle-blogger.jpg',
       name: 'Twins',
-      category: 'Lifestyle Content Creator',
+      subcategory: 'Lifestyle Content Creator',
+      province: 'DKI Jakarta',
+      city: 'Jakarta',
+      description: 'I am active in Instagram and a few facts about my account\:\nMost liked photo: 35900 likes10000-12000 likes per post (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+      price: 350000,
     },
     {
       source: 'https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
       name: 'Adelle',
-      category: 'Make Up Model',
+      subcategory: 'Make Up Model',
+      province: 'DKI Jakarta',
+      city: 'Jakarta',
+      description: 'I am active in Instagram and a few facts about my account\:\nMost liked photo: 35900 likes10000-12000 likes per post (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+      price: 350000,
     },
   ]);
 
@@ -37,16 +53,20 @@ const InfluencerScreen = ({ navigation, route }) => {
         {
           source: 'https://katherinecalnan.com/wp-content/uploads/sb-instagram-feed-images/124804777_189531592673432_746234738064300489_nlow.jpg',
           name: 'Maria Rssds sdsds',
-          category: 'Fashion Model',
+          subcategory: 'Fashion Model',
           province: 'DKI Jakarta',
-          city: 'Jakarta'
+          city: 'Jakarta',
+          description: 'I am active in Instagram and a few facts about my account\:\nMost liked photo: 35900 likes10000-12000 likes per post (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+          price: 350000,
         },
         {
           source: 'https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500',
           name: 'Adelle',
-          category: 'Make Up Model',
+          subcategory: 'Make Up Model',
           province: 'DI Jogjakarta',
-          city: 'Jogjakarta'
+          city: 'Jogjakarta',
+          description: 'I am active in Instagram and a few facts about my account\:\nMost liked photo: 35900 likes10000-12000 likes per post (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+          price: 350000,
         },
       ],
     },
@@ -56,16 +76,20 @@ const InfluencerScreen = ({ navigation, route }) => {
         {
           source: 'https://starngage.com/wp-content/uploads/2019/05/1.-Magdalena.jpg',
           name: 'Sasa',
-          category: 'Food Blogger',
+          subcategory: 'Food Blogger',
           province: 'DI Jogjakarta',
-          city: 'Jogjakarta'
+          city: 'Jogjakarta',
+          description: 'I am active in Blog and a few facts about my website\:\nMost viewed blog: 359200 likes10000-12000 likes per blog (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+          price: 350000,
         },
         {
           source: 'https://images.pexels.com/photos/6469/red-hands-woman-creative.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
           name: 'SCURD',
-          category: 'Comedy Blogger',
+          subcategory: 'Comedy Blogger',
           province: 'Sumatera Utara',
-          city: 'Medan'
+          city: 'Medan',
+          description: 'I am active in Blog and a few facts about my website\:\nMost viewed blog: 359200 likes10000-12000 likes per blog (Top commented: 174 comments)\nNo bots or like/comments services used.\nEverything is real\.\n\nTips for getting the most of the shoutout\:\nSend a high quality picture (or video).\nUse an engaging caption.\nGetting a decent amount of followers on your account can help a bit\n\nVisit my Instagram at @adel_le\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.',
+          price: 350000,
         },
       ],
     }
@@ -77,7 +101,8 @@ const InfluencerScreen = ({ navigation, route }) => {
         <TopSearchBar />
         <PremiumCarousel 
           containerStyle={styles.premiumCarousel}
-          carouselItems={premiumCarouselItems} />
+          carouselItems={premiumCarouselItems}
+          navigation={navigation} />
         { categoryCarousel.map((category, index) => {
             return <CategoryCarousel 
               key={index}

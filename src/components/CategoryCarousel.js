@@ -6,15 +6,19 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const windowWidth = Dimensions.get('window').width;
 
 const CategoryCarousel = (props) => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-  const [carouselItems, setCarouselItems] = React.useState(props.carouselItems.items);
+  const { navigation } = props;
 
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const [carouselRef, setCarouselRef] = React.useState(React.createRef());
+
+  const carouselItems = props.carouselItems.items;
 
   const renderItem = ({ item, index }) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => { props.navigation.navigate('InfluencerDetail') }}>
+        onPress={() => { navigation.navigate('InfluencerDetail', {
+          data: item,
+        }) }}>
         <View style={styles.card}>
           <Image
             style={styles.cardImage}
@@ -23,10 +27,10 @@ const CategoryCarousel = (props) => {
             <Text
               style={styles.cardTitle}
               numberOfLines={1}>
-              {item.name}
+              { item.name }
             </Text>
-            <Text style={styles.cardDesc}>{item.category}</Text>
-            <Text style={styles.cardLocation}>{item.province}, {item.city}</Text>
+            <Text style={styles.cardDesc}>{ item.subcategory }</Text>
+            <Text style={styles.cardLocation}>{ item.province }, { item.city }</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>

@@ -3,33 +3,39 @@ import { StyleSheet, View, Text, Dimensions, Button, TouchableHighlight, Touchab
 import { ScrollView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Feather';
-import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('screen');
 
-const InfluencerDetailScreen = (props) => {
-  const { navigation, route } = props;
-  const { data } = route.params;
+const DescriptionBottomSheet = (props) => {
+  const { data } = props;
 
   return (
-    <View style={styles.container}>
-      <ImageBackground 
-        style={styles.imageBackground}
-        source={{ uri: data.source }}>
-        <TouchableWithoutFeedback
-          onPress={() => { navigation.navigate('Influencer') }}>
-          <Icon style={styles.backIcon} name='arrow-left' size={32} />
-        </TouchableWithoutFeedback>
-      </ImageBackground>
-
-      <DescriptionBottomSheet
-        data={data}
-      />
-    </View>
+    <BottomSheet
+      snapPoints={[100, SCREEN_HEIGHT - 132]}
+      index={0}>
+      <BottomSheetScrollView
+        contentContainerStyle={styles.sheetContainer}>
+        <View style={styles.topDesc}>
+          <View style={styles.leftDesc}>
+            <Text style={styles.boldText} numberOfLines={1}>{ data.name }</Text>
+            <View style={styles.flexEnd}>
+              <Text style={styles.normalText}>{ data.subcategory }</Text>
+              <Text style={styles.thinText}>{ data.province }, { data.city }</Text>
+            </View>
+          </View>
+          <View style={styles.rightDesc}>
+            <Text style={styles.boldText}>Price</Text>
+            <Text style={styles.normalText}>~ Rp. { data.price }</Text>
+          </View>
+        </View>
+        <Text style={styles.descText}>Description</Text>
+        <Text style={styles.desc}>{ data.description }</Text>
+      </BottomSheetScrollView>
+    </BottomSheet>
   );
 };
 
-export default InfluencerDetailScreen;
+export default DescriptionBottomSheet;
 
 const styles = StyleSheet.create({
   container: {
