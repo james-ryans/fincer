@@ -110,7 +110,8 @@ const InfluencerScreen = (props) => {
         <PremiumCarousel 
           containerStyle={styles.premiumCarousel}
           carouselItems={premiumCarouselItems}
-          navigation={navigation} />
+          navigation={navigation}
+          navigateTo="InfluencerDetail" />
         { categoryCarousel.map((category, index) => {
             return <CategoryCarousel 
               key={index}

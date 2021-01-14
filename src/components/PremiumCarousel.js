@@ -5,7 +5,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 const windowWidth = Dimensions.get('window').width;
 
 const PremiumCarousel = (props) => {
-  const { navigation } = props;
+  const { navigation, navigateTo } = props;
 
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [carouselItems, setCarouselItems] = React.useState(props.carouselItems);
@@ -13,7 +13,7 @@ const PremiumCarousel = (props) => {
   const renderItem = ({ item, index }) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => { navigation.navigate('InfluencerDetail', {
+        onPress={() => { navigation.navigate(navigateTo, {
           data: item,
         }) }}>
         <View style={styles.card}>
