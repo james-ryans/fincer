@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
   backIcon: {
     margin: 16,
     color: '#FFFFFF',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: '#A2A2A2',
+    textShadowRadius: 16,
   },
   sheetContainer: {
     backgroundColor: '#FFFFFF',

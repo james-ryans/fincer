@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Image, Dimensions, TouchableWithoutFeedback } from 'react-native';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('screen');
 
 const CardList = (props) => {
-  const { title, items } = props;
+  const { navigation, navigateTo, title, items } = props;
 
   return (
     <View style={styles.container}>
@@ -12,15 +12,20 @@ const CardList = (props) => {
       <View style={styles.listContainer}>
         { items.map((item, index) => {
             return (
-              <View key={index} style={styles.card}>
-                <Image
-                  style={styles.cardImage}
-                  source={{ uri: item.source }} />
-                <View style={styles.cardText}>
-                  <Text style={styles.cardTitle} numberOfLines={1}>{ item.name } </Text>
-                  <Text style={styles.cardSubcategory}>{ item.subcategory }</Text>
+              <TouchableWithoutFeedback
+                onPress={() => { navigation.navigate(navigateTo, {
+                  data: item,
+                }); }}>
+                <View key={index} style={styles.card}>
+                  <Image
+                    style={styles.cardImage}
+                    source={{ uri: item.source }} />
+                  <View style={styles.cardText}>
+                    <Text style={styles.cardTitle} numberOfLines={1}>{ item.name } </Text>
+                    <Text style={styles.cardSubcategory}>{ item.subcategory }</Text>
+                  </View>
                 </View>
-              </View>
+              </TouchableWithoutFeedback>
             );
           })
         }
