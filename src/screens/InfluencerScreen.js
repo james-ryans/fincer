@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, Dimensions, TouchableHighlight, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { debounce, throttle } from 'lodash';
 
 import TopSearchBar from '../components/TopSearchBar';
 import PremiumCarousel from '../components/PremiumCarousel';
 import CategoryCarousel from '../components/CategoryCarousel';
 
-const InfluencerScreen = ({ navigation, route }) => {
+const InfluencerScreen = (props) => {
+  const { navigation } = props;
   const [premiumCarouselItems, setPremiumCarouselItems] = React.useState([
     {
       source: 'https://katherinecalnan.com/wp-content/uploads/sb-instagram-feed-images/124804777_189531592673432_746234738064300489_nlow.jpg',
@@ -95,10 +97,16 @@ const InfluencerScreen = ({ navigation, route }) => {
     }
   ]);
 
+
+  const onFocusHandler = debounce(() => {
+    navigation.navigate('InfluencerFilter');
+  }, 2000, { leading: true, trailing: false });
+
   return (
     <ScrollView>
       <View style={styles.container}>
-        <TopSearchBar />
+        <TopSearchBar
+          onFocus={onFocusHandler} />
         <PremiumCarousel 
           containerStyle={styles.premiumCarousel}
           carouselItems={premiumCarouselItems}

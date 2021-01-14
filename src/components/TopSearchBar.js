@@ -1,20 +1,30 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 
-const TopSearchBar = () => {
-  const [search, setSearch] = React.useState('');
+const TopSearchBar = (props) => {
+  const { onFocus, value, onChangeText, isFocused = false } = props;
+
+  const searchBarRef = React.useRef();
+
+  React.useEffect(() => {
+    if (isFocused) {
+      searchBarRef.current.focus();
+    }
+  }, []);
 
   return (
     <SearchBar
+      ref={searchBarRef}
       lightTheme={true}
       round={true}
       containerStyle={styles.container}
       inputContainerStyle={styles.inputContainer}
       inputStyle={styles.input}
       placeholder="Search"
-      onChangeText={(search) => { setSearch(search) }}
-      value={search}
+      onFocus={onFocus}
+      onChangeText={onChangeText}
+      value={value}
     />
   )
 };

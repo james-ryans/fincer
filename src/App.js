@@ -11,9 +11,13 @@ import AuthContext from './utils/authContext';
 
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+
 import InfluencerScreen from './screens/InfluencerScreen';
 import InfluencerDetailScreen from './screens/InfluencerDetailScreen';
+import InfluencerFilterScreen from './screens/InfluencerFilterScreen';
+
 import BrandScreen from './screens/BrandScreen';
+
 import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
@@ -74,6 +78,7 @@ const App = () => {
                     <InfluencerStack.Navigator screenOptions={{ headerShown: false }}>
                       <InfluencerStack.Screen name="Influencer" component={InfluencerScreen} />
                       <InfluencerStack.Screen name="InfluencerDetail" component={InfluencerDetailScreen} />
+                      <InfluencerStack.Screen name="InfluencerFilter" component={InfluencerFilterScreen} />
                     </InfluencerStack.Navigator>
                   )}
                 </Tab.Screen>

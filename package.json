@@ -17,6 +17,7 @@
     "@react-navigation/stack": "^5.12.8",
     "babel-preset-react-native": "^4.0.1",
     "formik": "^2.2.6",
+    "lodash": "^4.17.20",
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-elements": "^3.1.0",
