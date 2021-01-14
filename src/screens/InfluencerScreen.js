@@ -9,6 +9,7 @@ import CategoryCarousel from '../components/CategoryCarousel';
 
 const InfluencerScreen = (props) => {
   const { navigation } = props;
+
   const [premiumCarouselItems, setPremiumCarouselItems] = React.useState([
     {
       source: 'https://katherinecalnan.com/wp-content/uploads/sb-instagram-feed-images/124804777_189531592673432_746234738064300489_nlow.jpg',
@@ -97,7 +98,6 @@ const InfluencerScreen = (props) => {
     }
   ]);
 
-
   const onFocusHandler = debounce(() => {
     navigation.navigate('InfluencerFilter');
   }, 2000, { leading: true, trailing: false });
@@ -116,7 +116,8 @@ const InfluencerScreen = (props) => {
               key={index}
               containerStyle={styles.categoryCarousel}
               carouselItems={category}
-              navigation={navigation} />
+              navigation={navigation}
+              navigateTo="InfluencerDetail" />
           })
         }
       </View>

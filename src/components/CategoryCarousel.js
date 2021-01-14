@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const windowWidth = Dimensions.get('window').width;
 
 const CategoryCarousel = (props) => {
-  const { navigation } = props;
+  const { navigation, navigateTo } = props;
 
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [carouselRef, setCarouselRef] = React.useState(React.createRef());
@@ -16,9 +16,9 @@ const CategoryCarousel = (props) => {
   const renderItem = ({ item, index }) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => { navigation.navigate('InfluencerDetail', {
+        onPress={() => { navigation.navigate(navigateTo, {
           data: item,
-        }) }}>
+        }); }}>
         <View style={styles.card}>
           <Image
             style={styles.cardImage}
