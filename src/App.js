@@ -17,12 +17,15 @@ import InfluencerDetailScreen from './screens/InfluencerDetailScreen';
 import InfluencerFilterScreen from './screens/InfluencerFilterScreen';
 
 import BrandScreen from './screens/BrandScreen';
+import BrandDetailScreen from './screens/BrandDetailScreen';
+import BrandFilterScreen from './screens/BrandFilterScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const InfluencerStack = createStackNavigator();
+const BrandStack = createStackNavigator();
 
 const App = () => {
   const [isSignedIn, setIsSignedIn] = React.useState(false);
@@ -82,7 +85,19 @@ const App = () => {
                     </InfluencerStack.Navigator>
                   )}
                 </Tab.Screen>
-                <Tab.Screen name="BrandTab" component={BrandScreen} />
+                <Tab.Screen 
+                  name="BrandTab"
+                  options={({ route }) => ({
+                    tabBarVisible: getFocusedRouteNameFromRoute(route) == 'BrandDetail' ? false : true,
+                  })}>
+                  {() => (
+                    <BrandStack.Navigator screenOptions={{ headerShown: false }}>
+                      <BrandStack.Screen name="Brand" component={BrandScreen} />
+                      <BrandStack.Screen name="BrandDetail" component={BrandDetailScreen} />
+                      <BrandStack.Screen name="BrandFilter" component={BrandFilterScreen} />
+                    </BrandStack.Navigator>
+                  )}
+                </Tab.Screen>
                 <Tab.Screen name="ProfileTab" component={ProfileScreen} />
               </Tab.Navigator>
             ) : (
