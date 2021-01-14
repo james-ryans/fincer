@@ -36,6 +36,7 @@ const PremiumCarousel = (props) => {
   return (
     <View
       style={props.containerStyle}>
+      <Text style={styles.title}>Premium</Text>
       <Carousel 
         layout="default"
         data={carouselItems}
@@ -63,6 +64,12 @@ export default PremiumCarousel;
 const styles = StyleSheet.create({
   contentContainer: {
     marginLeft: 8,
+  },
+  title: {
+    fontFamily: 'Roboto-Medium',
+    fontSize: 20,
+    marginBottom: 6,
+    marginLeft: 32,
   },
   card: {
     flexDirection: 'row',
