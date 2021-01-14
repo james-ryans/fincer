@@ -3,17 +3,17 @@ import { StyleSheet, View, Text, Dimensions } from 'react-native';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('screen');
 
-const CategoryList = (props) => {
-  const { categories } = props;
+const BannerList = (props) => {
+  const { title, items } = props;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Categories</Text>
+      <Text style={styles.title}>{ title }</Text>
       <View style={styles.listContainer}>
-        { categories.map((category, index) => {
+        { items.map((item, index) => {
             return (
-              <View key={index} style={{...styles.banner, backgroundColor: category.backgroundColor }}>
-                <Text style={styles.bannerText}>{ category.text }</Text>
+              <View key={index} style={{...styles.banner, backgroundColor: item.backgroundColor }}>
+                <Text style={styles.bannerText}>{ item.text }</Text>
               </View>
             );
           })
@@ -23,7 +23,7 @@ const CategoryList = (props) => {
   );
 };
 
-export default CategoryList;
+export default BannerList;
 
 const styles = StyleSheet.create({
   container: {

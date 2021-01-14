@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Dimensions, TouchableHighlight, ScrollView } fr
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import TopSearchBar from '../components/TopSearchBar';
-import CategoryList from '../components/CategoryList';
+import BannerList from '../components/BannerList';
 import CardList from '../components/CardList';
 
 const InfluencerFilterScreen = (props) => {
@@ -52,8 +52,9 @@ const InfluencerFilterScreen = (props) => {
 
       <ScrollView style={styles.scrollViewContainer}>
         { search.length === 0 &&
-          <CategoryList 
-            categories={categories} />
+          <BannerList
+            title="Categories"
+            items={categories} />
         }
         <CardList
           title="Influencers"
