@@ -1,16 +1,13 @@
 import * as React from 'react';
 import { StyleSheet, Text, Button, View, ImageBackground, Pressable } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { ErrorMessage, Formik } from 'formik';
 import * as Yup from 'yup';
 
-import AuthContext from '../utils/authContext';
-
 import HomeScreen from './InfluencerScreen';
 
 const SignInScreen = ({ navigation, route }) => {
-  const { isSignedIn, setIsSignedIn } = React.useContext(AuthContext);
-
   return (
     <Formik
       initialValues={{
@@ -22,12 +19,21 @@ const SignInScreen = ({ navigation, route }) => {
           .email('Invalid email address')
           .required('Required'),
         password: Yup.string()
-          .min(8, 'Must be 8 characters or more')
+          .min(6, 'Must be 6 characters or more')
           .required('Required'),
       })}
       onSubmit={(values, actions) => {
         actions.setSubmitting(false);
-        setIsSignedIn(true);
+        auth()
+          .signInWithEmailAndPassword(values.email, values.password)
+          .catch((error) => {
+            if (error.code === 'auth/user-not-found') {
+              actions.setFieldError('email', 'Couldn\'t find your email address');
+            }
+            if (error.code === 'auth/wrong-password') {
+              actions.setFieldError('password', 'Wrong password');
+            }
+          })
       }}>
       {formik => (
         <View style={styles.container}>

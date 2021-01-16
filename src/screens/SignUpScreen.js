@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { View, Text, Button, StyleSheet, Dimensions } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { Formik } from 'formik';
@@ -12,24 +13,31 @@ const SignUpScreen = ({ navigation, route }) => {
     <Formik
       initialValues={{
         email: '',
-        username: '',
         password: '',
+        confirmPassword: '',
         buttonState: '',
       }}
       validationSchema={Yup.object({
         email: Yup.string()
           .email('Invalid email address')
           .required('Required'),
-        username: Yup.string()
-          .min(4, 'Must be at least 4 characters long')
-          .required('Required'),
         password: Yup.string()
-          .min(8, 'Must be at least 8 characters long')
-          .required('Required')
+          .min(6, 'Must be at least 6 characters long')
+          .required('Required'),
+        confirmPassword: Yup.string()
+        .min(6, 'Must be at least 6 characters long')
+        .required('Required')
+        .oneOf([Yup.ref('password')], 'Please make sure your password match'),
       })}
       onSubmit={(values, actions) => {
         actions.setSubmitting(false);
-        navigation.goBack();
+        auth()
+          .createUserWithEmailAndPassword(values.email, values.password)
+          .catch((error) => {
+            if (error.code === 'auth/email-already-in-use') {
+              actions.setFieldError('email', 'That email address is already exists');
+            }
+          });
       }}
     >
       { formik => (
@@ -52,16 +60,6 @@ const SignUpScreen = ({ navigation, route }) => {
 
           <TextInput
             style={styles.textInput}
-            placeholder='Username'
-            placeholderTextColor='#222832'
-            onChangeText={formik.handleChange('username')}
-            onBlur={formik.handleBlur('username')}/>
-          { formik.touched.username && formik.errors.username &&
-            <Text style={styles.errorText}>{ formik.errors.username }</Text>
-          }
-
-          <TextInput
-            style={styles.textInput}
             placeholder='Kata Sandi'
             placeholderTextColor='#222832'
             secureTextEntry
@@ -69,6 +67,17 @@ const SignUpScreen = ({ navigation, route }) => {
             onBlur={formik.handleBlur('password')}/>
           { formik.touched.password && formik.errors.password &&
             <Text style={styles.errorText}>{ formik.errors.password }</Text>
+          }
+
+          <TextInput
+            style={styles.textInput}
+            placeholder='Konfirmasi Kata Sandi'
+            placeholderTextColor='#222832'
+            secureTextEntry
+            onChangeText={formik.handleChange('confirmPassword')}
+            onBlur={formik.handleBlur('confirmPassword')}/>
+          { formik.touched.confirmPassword && formik.errors.confirmPassword &&
+            <Text style={styles.errorText}>{ formik.errors.confirmPassword }</Text>
           }
 
           <View style={styles.buttonView}>

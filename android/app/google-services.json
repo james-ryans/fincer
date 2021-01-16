@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "375152481586",
+    "firebase_url": "https://fincer-9ae28-default-rtdb.firebaseio.com",
+    "project_id": "fincer-9ae28",
+    "storage_bucket": "fincer-9ae28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375152481586:android:24582ace632dc852dab32b",
+        "android_client_info": {
+          "package_name": "com.fincer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "375152481586-5jhjd3fv39l35087nstv189gspclsmeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAflikyc3H0_VgANL6y0U4niRUxdR7j5IU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "375152481586-5jhjd3fv39l35087nstv189gspclsmeh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Dimensions, TouchableHighlight, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Button, TouchableHighlight, ScrollView } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { debounce, throttle } from 'lodash';
 
@@ -9,6 +10,11 @@ import CategoryCarousel from '../components/CategoryCarousel';
 
 const InfluencerScreen = (props) => {
   const { navigation } = props;
+  const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    setUser(auth()._user);
+  }, []);
 
   const [premiumCarouselItems, setPremiumCarouselItems] = React.useState([
     {
