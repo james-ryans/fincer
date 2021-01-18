@@ -20,11 +20,13 @@ import BrandDetailScreen from './screens/BrandDetailScreen';
 import BrandFilterScreen from './screens/BrandFilterScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
+import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const InfluencerStack = createStackNavigator();
 const BrandStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
 
 const App = () => {
   const [initializing, setInitializing] = React.useState(true);
@@ -39,6 +41,8 @@ const App = () => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   }, []);
+
+  if (initializing) return null;
 
   return (
     <SafeAreaProvider>
@@ -107,7 +111,18 @@ const App = () => {
                   </BrandStack.Navigator>
                 )}
               </Tab.Screen>
-              <Tab.Screen name="ProfileTab" component={ProfileScreen} />
+              <Tab.Screen 
+                name="ProfileTab"
+                options={({ route }) => ({
+                  tabBarVisible: getFocusedRouteNameFromRoute(route) == 'ProfileUpdate' ? false : true,
+                })}>
+                {() => (
+                  <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
+                    <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+                    <ProfileStack.Screen name="ProfileUpdate" component={ProfileUpdateScreen} />
+                  </ProfileStack.Navigator>
+                )}
+              </Tab.Screen>
             </Tab.Navigator>
           )
         }

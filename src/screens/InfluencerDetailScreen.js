@@ -23,8 +23,23 @@ const InfluencerDetailScreen = (props) => {
       </ImageBackground>
 
       <DescriptionBottomSheet
-        data={data}
-      />
+        snapPoints={[100, SCREEN_HEIGHT - 132]}>
+        <View style={styles.topDesc}>
+          <View style={styles.leftDesc}>
+            <Text style={styles.boldText} numberOfLines={1}>{ data.name }</Text>
+            <View style={styles.flexEnd}>
+              <Text style={styles.normalText}>{ data.subcategory }</Text>
+              <Text style={styles.thinText}>{ data.province }, { data.city }</Text>
+            </View>
+          </View>
+          <View style={styles.rightDesc}>
+            <Text style={styles.boldText}>Price</Text>
+            <Text style={styles.normalText}>~ Rp. { data.price }</Text>
+          </View>
+        </View>
+        <Text style={styles.descText}>Description</Text>
+        <Text style={styles.desc}>{ data.description }</Text>
+      </DescriptionBottomSheet>
     </View>
   );
 };
@@ -46,10 +61,6 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 0 },
     textShadowColor: '#A2A2A2',
     textShadowRadius: 16,
-  },
-  sheetContainer: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 24,
   },
   topDesc: {
     flexDirection: 'row',
