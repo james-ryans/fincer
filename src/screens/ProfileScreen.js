@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, ImageBackground, View, Text, Button, TouchableO
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
 import { TouchableOpacityComponent } from 'react-native';
 
@@ -37,10 +38,7 @@ const ProfileScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground 
-        style={styles.imageBackground}
-        source={{ uri: influencer?.source }}>
-      </ImageBackground>
+      <Icon style={styles.noImage} name='no-photography' size={48} />
 
       <DescriptionBottomSheet
         snapPoints={[128]}>
@@ -68,11 +66,15 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#E2E2E2',
+    alignItems: 'center',
   },
-  imageBackground: {
-    width: '100%',
-    flex: 1,
-    justifyContent: 'space-between',
+  noImage: {
+    marginTop: (SCREEN_HEIGHT - 94 - 128 - 48) / 2,
+    color: '#FFFFFF',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: '#A2A2A2',
+    textShadowRadius: 16,
   },
   createButton: {
     marginTop: 15,

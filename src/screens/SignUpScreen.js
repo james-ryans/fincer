@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, Text, Button, StyleSheet, Dimensions } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { Formik } from 'formik';
@@ -33,6 +34,11 @@ const SignUpScreen = ({ navigation, route }) => {
         actions.setSubmitting(false);
         auth()
           .createUserWithEmailAndPassword(values.email, values.password)
+          .then(() => {
+            database()
+              .ref(`/users/${values.buttonState}`)
+              .set({ [auth().currentUser.uid]: true });
+          })
           .catch((error) => {
             if (error.code === 'auth/email-already-in-use') {
               actions.setFieldError('email', 'That email address is already exists');
@@ -83,7 +89,7 @@ const SignUpScreen = ({ navigation, route }) => {
           <View style={styles.buttonView}>
           <TouchableOpacity
               onPress={() => {
-                formik.setFieldValue('buttonState', 'INFLUENCER');
+                formik.setFieldValue('buttonState', 'influencers');
                 formik.handleSubmit();
               }}>
               <View style={styles.button}>
@@ -92,7 +98,7 @@ const SignUpScreen = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                formik.setFieldValue('buttonState', 'BUSINESSMAN');
+                formik.setFieldValue('buttonState', 'brands');
                 formik.handleSubmit();
               }}>
               <View style={styles.button}>

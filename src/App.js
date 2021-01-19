@@ -42,8 +42,6 @@ const App = () => {
     return subscriber;
   }, []);
 
-  if (initializing) return null;
-
   return (
     <SafeAreaProvider>
       <NavigationContainer>
