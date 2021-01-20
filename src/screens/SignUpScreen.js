@@ -87,7 +87,7 @@ const SignUpScreen = ({ navigation, route }) => {
           }
 
           <View style={styles.buttonView}>
-          <TouchableOpacity
+            <TouchableOpacity
               onPress={() => {
                 formik.setFieldValue('buttonState', 'influencers');
                 formik.handleSubmit();

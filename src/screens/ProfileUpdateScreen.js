@@ -1,63 +1,256 @@
 import * as React from 'react';
-import { StyleSheet, ImageBackground, View, Text, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, ImageBackground, View, Text, TextInput, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import * as ImagePicker from 'react-native-image-picker';
+import { Picker } from '@react-native-picker/picker';
+import { ErrorMessage, Formik } from 'formik';
+import * as Yup from 'yup';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('screen');
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
 
 const ProfileUpdateScreen = (props) => {
-  const { navigation, route } = props;
+  const { navigation } = props;
+
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const userId = auth().currentUser.uid;
   const [userType, setUserType] = React.useState();
-  const [imageURI, setImageURI] = React.useState();
+  const [user, setUser] = React.useState();
 
   React.useEffect(() => {
-    database().ref('/users/influencers').once('value', (snapshot) => {
-      setUserType(snapshot.hasChild(userId) ? 'influencers' : 'brands');
-    });
+    database()
+      .ref('/users/influencers')
+      .once('value', (snapshot) => {
+        setUserType(snapshot.hasChild(userId) ? 'influencers' : 'brands');
+      });
   }, []);
 
-  const uploadFile = () => {
-    ImagePicker.launchImageLibrary({
-      noData: true,
-    }, (response) => {
-      if (!response.didCancel && response.fileSize <= 5 * 1024 * 1024 && response.errorCode == null) {
-        const imageType = response.type.split('/').pop();
-        setImageURI(response.uri);
-      }
-    });
-  };
+  React.useEffect(() => {
+    database()
+      .ref(`/${userType}/${userId}`)
+      .once('value', (snapshot) => {
+        setUser(snapshot.val());
+      });
+  }, [userId, userType]);
+
+  React.useEffect(() => {
+    setIsLoading(user === undefined);
+  }, [user]);
+
+  if (isLoading) return null;
 
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        style={styles.imageBackground}
-        source={{ uri : imageURI }}>
-        <TouchableWithoutFeedback
-          onPress={() => { navigation.navigate('Profile') }}>
-          <Icon style={styles.backIcon} name='arrow-left' size={32} />
-        </TouchableWithoutFeedback>
-        <View style={styles.centerContainer}>
-          <TouchableWithoutFeedback
-            onPress={uploadFile}>
-            <MaterialCommunityIcon style={styles.addImage} name='camera-plus' size ={48} />
-          </TouchableWithoutFeedback>
-          <Text></Text>
-        </View>
-      </ImageBackground>
+    <Formik
+      enableReinitialize
+      initialValues={{
+        imageURI: user?.imageURI,
+        name: user?.name,
+        category: user?.category ?? 'arts',
+        subcategory: user?.subcategory,
+        city: user?.city,
+        province: user?.province,
+        price: user?.price,
+        description: user?.description,
+      }}
+      validationSchema={Yup.object({
+        name: Yup.string()
+          .min(4, 'Must be 4 characters or more')
+          .required('Required'),
+        imageURI: Yup.string()
+          .required('Required'),
+        category: Yup.string()
+          .required('Required'),
+        subcategory: Yup.string()
+          .required('Required'),
+        city: Yup.string()
+          .required('Required'),
+        province: Yup.string()
+          .required('Required'),
+        price: Yup.number('Price must be a number')
+          .moreThan(0, 'Price must greater than 0')
+          .required('Required'),
+        description: Yup.string()
+          .required('Required'),
+      })}
+      onSubmit={(values, actions) => {
+        setIsLoading(true);
 
-      <DescriptionBottomSheet
-        snapPoints={[100, SCREEN_HEIGHT - 132]}>
-        <Text>wkwk</Text>
-      </DescriptionBottomSheet>
-    </View>
-  );
+        const imageType = values.imageURI.split('.').pop();
+        storage()
+          .ref(`/${userType}/${userId}.${imageType}`)
+          .putFile(values.imageURI)
+          .then(() => {
+            storage()
+              .ref(`/${userType}/${userId}.${imageType}`)
+              .getDownloadURL()
+              .then((url) => {
+                database()
+                  .ref(`/categories/${userType}/${values.category}/members/${userId}`)
+                  .set(true);
+
+                database()
+                  .ref(`/${userType}/${userId}`)
+                  .set({
+                    imageURI: url,
+                    name: values.name,
+                    category: values.category,
+                    subcategory: values.subcategory,
+                    city: values.city,
+                    province: values.province,
+                    price: values.price,
+                    description: values.description,
+                  })
+                  .then(() => {
+                    navigation.navigate('Profile');
+                    actions.setSubmitting(false);
+                  });
+              });
+          });
+      }}>
+      {formik => (
+        <View style={styles.container}>
+          <ImageBackground
+            style={styles.imageBackground}
+            source={{ uri : formik.values.imageURI == '' ? null : formik.values.imageURI }}>
+            <TouchableWithoutFeedback
+              onPress={() => { navigation.navigate('Profile') }}>
+              <Icon style={styles.backIcon} name='arrow-left' size={32} />
+            </TouchableWithoutFeedback>
+            <View style={styles.centerContainer}>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  ImagePicker.launchImageLibrary({
+                    noData: true,
+                  }, (response) => {
+                    formik.setFieldTouched('imageURI', true);
+                    if (!response.didCancel && response.fileSize <= 5 * 1024 * 1024 && response.errorCode == null) {
+                      formik.setFieldValue('imageURI', response.uri);
+                    }
+                  });
+                }}>
+                <MaterialCommunityIcon style={styles.addImage} name='camera-plus' size ={48} />
+              </TouchableWithoutFeedback>
+              { formik.touched.imageURI && formik.errors.imageURI &&
+                <Text style={styles.errorText}>{ formik.errors.imageURI }</Text>
+              }
+            </View>
+          </ImageBackground>
+    
+          <DescriptionBottomSheet
+            snapPoints={[100, SCREEN_HEIGHT - 132]}>
+            <TextInput
+              style={{ ...styles.textInput, marginTop: 32 }}
+              placeholder='Nama'
+              placeholderTextColor='#4F4F4F'
+              onChangeText={formik.handleChange('name')}
+              onBlur={formik.handleBlur('name')}
+              value={formik.values.name}/>
+            { formik.touched.name && formik.errors.name &&
+              <Text style={styles.errorText}>{ formik.errors.name }</Text>
+            }
+
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={formik.values.category}
+                style={styles.pickerInput}
+                itemStyle={styles.pickerText}
+                onValueChange={(itemValue) => {
+                  formik.setFieldValue('category', itemValue);
+                }}>
+                <Picker.Item label="Art" value="arts" />
+                <Picker.Item label="Model" value="models" />
+              </Picker> 
+            </View>
+            { formik.touched.category && formik.errors.category &&
+              <Text style={styles.errorText}>{ formik.errors.category }</Text>
+            }
+
+            <TextInput
+              style={styles.textInput}
+              placeholder='Sub Kategori'
+              placeholderTextColor='#4F4F4F'
+              onChangeText={formik.handleChange('subcategory')}
+              onBlur={formik.handleBlur('subcategory')}
+              value={formik.values.subcategory}/>
+            { formik.touched.subcategory && formik.errors.subcategory &&
+              <Text style={styles.errorText}>{ formik.errors.subcategory }</Text>
+            }
+
+            <TextInput
+              style={styles.textInput}
+              placeholder='Kota'
+              placeholderTextColor='#4F4F4F'
+              onChangeText={formik.handleChange('city')}
+              onBlur={formik.handleBlur('city')}
+              value={formik.values.city}/>
+            { formik.touched.city && formik.errors.city &&
+              <Text style={styles.errorText}>{ formik.errors.city }</Text>
+            }
+
+            <TextInput
+              style={styles.textInput}
+              placeholder='Provinsi'
+              placeholderTextColor='#4F4F4F'
+              onChangeText={formik.handleChange('province')}
+              onBlur={formik.handleBlur('province')}
+              value={formik.values.province}/>
+            { formik.touched.province && formik.errors.province &&
+              <Text style={styles.errorText}>{ formik.errors.province }</Text>
+            }
+
+            <TextInput
+              style={styles.textInput}
+              keyboardType='numeric'
+              placeholder='Harga'
+              placeholderTextColor='#4F4F4F'
+              onChangeText={formik.handleChange('price')}
+              onBlur={formik.handleBlur('price')}
+              value={formik.values.price}/>
+            { formik.touched.price && formik.errors.price &&
+              <Text style={styles.errorText}>{ formik.errors.price }</Text>
+            }
+
+            <TextInput
+              multiline={true}
+              style={{...styles.textInput, height: 256}}
+              placeholder='Deskripsi'
+              placeholderTextColor='#4F4F4F'
+              onChangeText={formik.handleChange('description')}
+              onBlur={formik.handleBlur('description')}
+              value={formik.values.description}/>
+            { formik.touched.description && formik.errors.description &&
+              <Text style={styles.errorText}>{ formik.errors.description }</Text>
+            }
+
+            <View style={styles.buttonView}>
+              <TouchableOpacity
+                onPress={() => {
+                  formik.handleSubmit();
+                }}>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>SIMPAN</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Profile');
+                }}>
+                <View style={styles.cancelButton}>
+                  <Text style={styles.cancelButtonText}>BATAL</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </DescriptionBottomSheet>
+        </View>
+      )}
+    </Formik>
+  )
 };
 
 export default ProfileUpdateScreen;
@@ -89,5 +282,62 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 0 },
     textShadowColor: '#A2A2A2',
     textShadowRadius: 16,
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#EA3C53',
+  },
+  textInput: {
+    backgroundColor: '#F2F2F2',
+    color: '#222832',
+    fontSize: 16,
+    borderRadius: 8,
+    padding: 12,
+    paddingHorizontal: 8,
+    marginTop: 16,
+    height: 48,
+    textAlignVertical: 'top',
+  },
+  pickerContainer: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E2E2E2',
+    borderWidth: 1,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  pickerInput: {
+    color: '#222832',
+  },
+  buttonView: {
+    marginTop: 40,
+    marginBottom: 120,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  button: {
+    backgroundColor: '#FF8D6F',
+    width: SCREEN_WIDTH / 2.8,
+    padding: 16,
+    borderRadius: 15,
+  },
+  cancelButton: {
+    backgroundColor: '#FFFFFF',
+    borderColor: '#FF0000',
+    borderWidth: 1,
+    width: SCREEN_WIDTH / 2.8,
+    padding: 16,
+    borderRadius: 15,
+  },
+  buttonText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 10,
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  cancelButtonText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 10,
+    color: '#FF0000',
+    textAlign: 'center',
   },
 });

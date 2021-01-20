@@ -25,6 +25,7 @@ export default DescriptionBottomSheet;
 
 const styles = StyleSheet.create({
   sheetContainer: {
+    flexGrow: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 24,
   },
