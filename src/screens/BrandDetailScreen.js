@@ -17,7 +17,7 @@ const BrandDetailScreen = (props) => {
     <View style={styles.container}>
         <ImageBackground
             style={styles.imageBackground}
-            source={{ uri: data.source }}>
+            source={{ uri: data.imageURI }}>
             <TouchableWithoutFeedback
                 onPress={() => { navigation.navigate('Brand')
             }}>

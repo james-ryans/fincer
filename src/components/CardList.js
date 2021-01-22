@@ -13,13 +13,14 @@ const CardList = (props) => {
         { items.map((item, index) => {
             return (
               <TouchableWithoutFeedback
+                key={index}
                 onPress={() => { navigation.navigate(navigateTo, {
                   data: item,
                 }); }}>
                 <View key={index} style={styles.card}>
                   <Image
                     style={styles.cardImage}
-                    source={{ uri: item.source }} />
+                    source={{ uri: item.imageURI }} />
                   <View style={styles.cardText}>
                     <Text style={styles.cardTitle} numberOfLines={1}>{ item.name } </Text>
                     <Text style={styles.cardSubcategory}>{ item.subcategory }</Text>

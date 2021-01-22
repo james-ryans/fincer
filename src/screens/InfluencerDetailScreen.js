@@ -15,7 +15,7 @@ const InfluencerDetailScreen = (props) => {
     <View style={styles.container}>
       <ImageBackground 
         style={styles.imageBackground}
-        source={{ uri: data.source }}>
+        source={{ uri: data.imageURI }}>
         <TouchableWithoutFeedback
           onPress={() => { navigation.navigate('Influencer') }}>
           <Icon style={styles.backIcon} name='arrow-left' size={32} />

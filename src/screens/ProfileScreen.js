@@ -6,6 +6,7 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
 import { TouchableOpacityComponent } from 'react-native';
+import { rgb } from 'chalk';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
 
@@ -285,20 +286,25 @@ const styles = StyleSheet.create({
     marginLeft: 16,
   },
   cancelModalButton: {
-    backgroundColor: '#FF8D6F',
+    backgroundColor: '#FFFFFF',
     width: 70,
     alignSelf: 'center',
     alignItems: 'center',
     padding: 6,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FF0000',
   },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    alignSelf: 'center',
-    width: SCREEN_WIDTH * 2 / 3,
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   modalView: {
+    width: SCREEN_WIDTH * 2 / 3,
+    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 25,
     shadowColor: '#000000',

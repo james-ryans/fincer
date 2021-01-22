@@ -19,7 +19,7 @@ const PremiumCarousel = (props) => {
         <View style={styles.card}>
           <Image
             style={styles.cardImage}
-            source={{ uri: item.source }} />
+            source={{ uri: item.imageURI }} />
           <View style={styles.cardText}>
             <Text
               style={styles.cardTitle}

@@ -13,9 +13,10 @@ const BannerList = (props) => {
         { items.map((item, index) => {
             return (
               <TouchableWithoutFeedback
-                onPress={() => { onPressHandler(item.text); }}>
+                key={index}
+                onPress={() => { console.log(item); onPressHandler(item.name, item.key); }}>
                 <View key={index} style={{...styles.banner, backgroundColor: item.backgroundColor }}>
-                  <Text style={styles.bannerText}>{ item.text }</Text>
+                  <Text style={styles.bannerText}>{ item.name }</Text>
                 </View>
               </TouchableWithoutFeedback>
             );

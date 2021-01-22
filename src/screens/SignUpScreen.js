@@ -37,7 +37,7 @@ const SignUpScreen = ({ navigation, route }) => {
           .then(() => {
             database()
               .ref(`/users/${values.buttonState}`)
-              .set({ [auth().currentUser.uid]: true });
+              .update({ [auth().currentUser.uid]: true });
           })
           .catch((error) => {
             if (error.code === 'auth/email-already-in-use') {
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   button: {
-    backgroundColor: '#FFAB8D',
+    backgroundColor: '#FF8D6F',
     width: windowWidth / 2.8,
     padding: 12,
     borderRadius: 15,

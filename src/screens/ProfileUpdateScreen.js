@@ -23,25 +23,59 @@ const ProfileUpdateScreen = (props) => {
   const [userType, setUserType] = React.useState();
   const [user, setUser] = React.useState();
 
+  const [categories, setCategories] = React.useState();
+
   React.useEffect(() => {
+    let isSubscribed = true;
+
     database()
       .ref('/users/influencers')
       .once('value', (snapshot) => {
-        setUserType(snapshot.hasChild(userId) ? 'influencers' : 'brands');
+        if (isSubscribed) {
+          setUserType(snapshot.hasChild(userId) ? 'influencers' : 'brands');
+        }
       });
+
+    return () => { isSubscribed = false; };
   }, []);
 
   React.useEffect(() => {
+    let isSubscribed = true;
+
     database()
       .ref(`/${userType}/${userId}`)
       .once('value', (snapshot) => {
-        setUser(snapshot.val());
+        if (isSubscribed) {
+          setUser(snapshot.val());
+        }
       });
+
+    database()
+      .ref(`/categories/${userType}`)
+      .orderByKey()
+      .once('value', (snapshot) => {
+        if (isSubscribed) {
+          let category_arr = [];
+          snapshot.forEach((item) => {
+            category_arr.push({
+              value: item.key,
+              label: item.val().name,
+            });
+          });
+          setCategories(category_arr);
+        }
+      });
+
+    return () => { isSubscribed = false; };
   }, [userId, userType]);
 
   React.useEffect(() => {
-    setIsLoading(user === undefined);
-  }, [user]);
+    let isSubscribed = true;
+    if (isSubscribed) {
+      setIsLoading(user === undefined || categories === undefined || categories.length === 0);
+    }
+    return () => { isSubscribed = false; };
+  }, [user, categories]);
 
   if (isLoading) return null;
 
@@ -51,7 +85,7 @@ const ProfileUpdateScreen = (props) => {
       initialValues={{
         imageURI: user?.imageURI,
         name: user?.name,
-        category: user?.category ?? 'arts',
+        category: user?.category ?? categories[0].value,
         subcategory: user?.subcategory,
         city: user?.city,
         province: user?.province,
@@ -81,37 +115,54 @@ const ProfileUpdateScreen = (props) => {
       onSubmit={(values, actions) => {
         setIsLoading(true);
 
-        const imageType = values.imageURI.split('.').pop();
-        storage()
-          .ref(`/${userType}/${userId}.${imageType}`)
-          .putFile(values.imageURI)
-          .then(() => {
-            storage()
-              .ref(`/${userType}/${userId}.${imageType}`)
-              .getDownloadURL()
-              .then((url) => {
-                database()
-                  .ref(`/categories/${userType}/${values.category}/members/${userId}`)
-                  .set(true);
+        const imageType = values.imageURI.split('.').pop().split('?').shift();
 
+        const storagePutFile = async () => {
+          storage()
+            .ref(`/${userType}/${userId}.${imageType}`)
+            .putFile(values.imageURI)
+            .then(databasePutData);
+        };
+
+        const databasePutData = () => {
+          storage()
+            .ref(`/${userType}/${userId}.${imageType}`)
+            .getDownloadURL()
+            .then((url) => {
+              if (user) {
                 database()
-                  .ref(`/${userType}/${userId}`)
-                  .set({
-                    imageURI: url,
-                    name: values.name,
-                    category: values.category,
-                    subcategory: values.subcategory,
-                    city: values.city,
-                    province: values.province,
-                    price: values.price,
-                    description: values.description,
-                  })
-                  .then(() => {
-                    navigation.navigate('Profile');
-                    actions.setSubmitting(false);
-                  });
-              });
-          });
+                  .ref(`/categories/${userType}/${user.category}/members/${userId}`)
+                  .remove();
+              }
+
+              database()
+                .ref(`/categories/${userType}/${values.category}/members/${userId}`)
+                .set(true);
+
+              database()
+                .ref(`/${userType}/${userId}`)
+                .set({
+                  imageURI: url,
+                  name: values.name,
+                  category: values.category,
+                  subcategory: values.subcategory,
+                  city: values.city,
+                  province: values.province,
+                  price: values.price,
+                  description: values.description,
+                })
+                .then(() => {
+                  actions.setSubmitting(false);
+                  navigation.navigate('Profile');
+                });
+            });
+        };
+
+        if (!values.imageURI.startsWith('http')) {
+          storagePutFile();
+        } else {
+          databasePutData();
+        }
       }}>
       {formik => (
         <View style={styles.container}>
@@ -163,8 +214,9 @@ const ProfileUpdateScreen = (props) => {
                 onValueChange={(itemValue) => {
                   formik.setFieldValue('category', itemValue);
                 }}>
-                <Picker.Item label="Art" value="arts" />
-                <Picker.Item label="Model" value="models" />
+                { categories.map((item, index) => {
+                  return <Picker.Item key={index} label={item.label} value={item.value} />
+                })}
               </Picker> 
             </View>
             { formik.touched.category && formik.errors.category &&
