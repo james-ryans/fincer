@@ -8,6 +8,8 @@ import * as Yup from 'yup';
 import HomeScreen from './InfluencerScreen';
 
 const SignInScreen = ({ navigation, route }) => {
+  const [saveState, setSaveState] = React.useState('');
+
   return (
     <Formik
       initialValues={{
@@ -41,6 +43,19 @@ const SignInScreen = ({ navigation, route }) => {
             <View style={styles.form}>
               <Text style={styles.title}>Fincer</Text>
               <Text style={styles.titleDesc}>finding influencer</Text>
+
+              <TextInput 
+                style={styles.textInput}
+                placeholder='dengan onSaveInstanceState'
+                placeholdetTextColor='#222832'
+                onChangeText={text => { setSaveState(text); }}
+                value={saveState}/>
+
+              <TextInput 
+                style={styles.textInput}
+                placeholder='tanpa onSaveInstanceState'
+                placeholdetTextColor='#222832'
+                value=''/>
       
               <TextInput
                 style={styles.textInput}
