@@ -51,12 +51,14 @@ const ProfileScreen = (props) => {
     <View style={styles.container}>
       { !user ? (
           <EmptyProfile
-            navigation={navigation} />
+            navigation={navigation}
+            userType={userType} />
         ) : (
           <ExistProfile
             navigation={navigation}
             setIsLoading={setIsLoading}
             userRef={userRef}
+            userType={userType}
             user={user} />
         )
       }
@@ -65,7 +67,7 @@ const ProfileScreen = (props) => {
 };
 
 const EmptyProfile = (props) => {
-  const { navigation } = props;
+  const { navigation, userType } = props;
 
   return (
     <>
@@ -77,7 +79,9 @@ const EmptyProfile = (props) => {
           style={styles.createButton}
           activeOpacity={0.8}
           underlayColor='#DF6D4F'
-          onPress={() => { navigation.navigate('ProfileUpdate'); }}>
+          onPress={() => { navigation.navigate('ProfileUpdate', {
+            userType: userType,
+          }); }}>
           <Text style={styles.buttonText}>Buat Profil</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -93,7 +97,7 @@ const EmptyProfile = (props) => {
 };
 
 const ExistProfile = (props) => {
-  const { navigation, setIsLoading, userRef, user } = props;
+  const { navigation, setIsLoading, userRef, user, userType } = props;
 
   const [removeModalVisible, setRemoveModalVisible] = React.useState(false);
 
@@ -152,7 +156,10 @@ const ExistProfile = (props) => {
             style={styles.createButton}
             activeOpacity={0.8}
             underlayColor='#DF6D4F'
-            onPress={() => { navigation.navigate('ProfileUpdate'); }}>
+            onPress={() => { navigation.navigate('ProfileUpdate', {
+              userType: userType,
+              user: user,
+            }); }}>
             <Text style={styles.buttonText}>Update Profil</Text>
           </TouchableOpacity>
           <TouchableOpacity

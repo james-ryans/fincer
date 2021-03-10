@@ -15,56 +15,52 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
 
 const ProfileUpdateScreen = (props) => {
-  const { navigation } = props;
+  const { navigation, route } = props;
 
   const [isLoading, setIsLoading] = React.useState(true);
 
   const userId = auth().currentUser.uid;
-  const [userType, setUserType] = React.useState();
-  const [user, setUser] = React.useState();
+  const [userType, setUserType] = React.useState(route.params?.userType);
+  const [user, setUser] = React.useState(route.params?.user);
 
   const [categories, setCategories] = React.useState();
 
   React.useEffect(() => {
-    let isSubscribed = true;
+    let isSubscribed = user === undefined;
 
-    database()
-      .ref('/users/influencers')
-      .once('value', (snapshot) => {
-        if (isSubscribed) {
-          setUserType(snapshot.hasChild(userId) ? 'influencers' : 'brands');
-        }
-      });
+    if (isSubscribed) {
+      database()
+        .ref(`/${userType}/${userId}`)
+        .once('value', (snapshot) => {
+          if (isSubscribed) {
+            setUser(snapshot.val());
+          }
+        });
+    }
 
     return () => { isSubscribed = false; };
-  }, []);
+  }, [userType]);
 
   React.useEffect(() => {
     let isSubscribed = true;
 
-    database()
-      .ref(`/${userType}/${userId}`)
-      .once('value', (snapshot) => {
-        if (isSubscribed) {
-          setUser(snapshot.val());
-        }
-      });
-
-    database()
-      .ref(`/categories/${userType}`)
-      .orderByKey()
-      .once('value', (snapshot) => {
-        if (isSubscribed) {
-          let category_arr = [];
-          snapshot.forEach((item) => {
-            category_arr.push({
-              value: item.key,
-              label: item.val().name,
+    if (isSubscribed) {
+      database()
+        .ref(`/categories/${userType}`)
+        .orderByKey()
+        .once('value', (snapshot) => {
+          if (isSubscribed) {
+            let category_arr = [];
+            snapshot.forEach((item) => {
+              category_arr.push({
+                value: item.key,
+                label: item.val().name,
+              });
             });
-          });
-          setCategories(category_arr);
-        }
-      });
+            setCategories(category_arr);
+          }
+        });
+    }
 
     return () => { isSubscribed = false; };
   }, [userId, userType]);
