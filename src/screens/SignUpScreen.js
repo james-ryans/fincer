@@ -10,6 +10,8 @@ import * as Yup from 'yup';
 const windowWidth = Dimensions.get('window').width;
 
 const SignUpScreen = ({ navigation, route }) => {
+  const [saveState, setSaveState] = React.useState('');
+
   return (
     <Formik
       initialValues={{
@@ -52,6 +54,19 @@ const SignUpScreen = ({ navigation, route }) => {
             <Text style={styles.title}>Fincer</Text>
             <Text style={styles.titleDesc}>finding influencer</Text>
           </View>
+
+          <TextInput 
+            style={styles.textInput}
+            placeholder='dengan useState'
+            placeholdetTextColor='#222832'
+            onChangeText={text => { setSaveState(text); }}
+            value={saveState}/>
+
+          <TextInput 
+            style={styles.textInput}
+            placeholder='tanpa useState'
+            placeholdetTextColor='#222832'
+            value=''/>
 
           <TextInput
             style={styles.textInput}
