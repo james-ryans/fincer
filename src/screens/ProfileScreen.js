@@ -21,11 +21,13 @@ const ProfileScreen = (props) => {
   const [user, setUser] = React.useState();
 
   React.useEffect(() => {
-    database()
-      .ref('/users/influencers')
-      .once('value', (snapshot) => {
-        setUserType(snapshot.hasChild(userId) ? 'influencers' : 'brands');
-      });
+    (async () => {
+      database()
+        .ref('/users/influencers')
+        .once('value', (snapshot) => {
+          setUserType(snapshot.hasChild(userId) ? 'influencers' : 'brands');
+        });
+    })();
   }, []);
 
   React.useEffect(() => {
@@ -105,32 +107,12 @@ const ExistProfile = (props) => {
     <ImageBackground
     style={styles.imageBackground}
     source={{ uri : user.imageURI }}>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={removeModalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.boldModalText}>Apakah anda yakin ingin menghapus profil?</Text>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                style={styles.cancelModalButton}
-                onPress={() => { setRemoveModalVisible(false); }}>
-                <Text style={styles.removeButtonText}>Batal</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.acceptModalButton}
-                onPress={() => {
-                  setIsLoading(true);
-                  userRef.remove();
-                  setRemoveModalVisible(false);
-                }}>
-                <Text style={styles.buttonText}>OK</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ProfileModal 
+        name={user.name}
+        userRef={userRef}
+        removeModalVisible={removeModalVisible}
+        setRemoveModalVisible={setRemoveModalVisible}
+      />
 
       <DescriptionBottomSheet
         snapPoints={[88, SCREEN_HEIGHT - 198]}>
@@ -181,6 +163,39 @@ const ExistProfile = (props) => {
     </ImageBackground>
   );
 };
+
+const ProfileModal = (props) => {
+  const { name, userRef, removeModalVisible, setRemoveModalVisible } = props;
+
+  return (
+    <Modal
+        animationType='fade'
+        transparent={true}
+        visible={removeModalVisible}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.boldModalText}>Apakah anda yakin ingin menghapus profil bernama {name}?</Text>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                style={styles.cancelModalButton}
+                onPress={() => { setRemoveModalVisible(false); }}>
+                <Text style={styles.removeButtonText}>Batal</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.acceptModalButton}
+                onPress={() => {
+                  setIsLoading(true);
+                  userRef.remove();
+                  setRemoveModalVisible(false);
+                }}>
+                <Text style={styles.buttonText}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+  );
+}
 
 export default ProfileScreen;
 

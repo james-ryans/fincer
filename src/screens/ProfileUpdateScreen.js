@@ -32,9 +32,7 @@ const ProfileUpdateScreen = (props) => {
       database()
         .ref(`/${userType}/${userId}`)
         .once('value', (snapshot) => {
-          if (isSubscribed) {
-            setUser(snapshot.val());
-          }
+          setUser(snapshot.val());
         });
     }
 
@@ -49,16 +47,14 @@ const ProfileUpdateScreen = (props) => {
         .ref(`/categories/${userType}`)
         .orderByKey()
         .once('value', (snapshot) => {
-          if (isSubscribed) {
-            let category_arr = [];
-            snapshot.forEach((item) => {
-              category_arr.push({
-                value: item.key,
-                label: item.val().name,
-              });
+          let category_arr = [];
+          snapshot.forEach((item) => {
+            category_arr.push({
+              value: item.key,
+              label: item.val().name,
             });
-            setCategories(category_arr);
-          }
+          });
+          setCategories(category_arr);
         });
     }
 

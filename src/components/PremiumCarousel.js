@@ -19,14 +19,14 @@ const PremiumCarousel = (props) => {
         <View style={styles.card}>
           <Image
             style={styles.cardImage}
-            source={{ uri: item.imageURI }} />
+            source={{ uri: item?.imageURI }} />
           <View style={styles.cardText}>
             <Text
               style={styles.cardTitle}
               numberOfLines={2}>
-              { item.name }
+              { item?.name }
             </Text>
-            <Text style={styles.cardDesc}>{ item.subcategory }</Text>
+            <Text style={styles.cardDesc}>{ item?.subcategory }</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>
