@@ -6,6 +6,8 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
 import { TouchableOpacityComponent } from 'react-native';
+import RNFetchBlob from 'rn-fetch-blob';
+import { PermissionsAndroid } from 'react-native';
 import { rgb } from 'chalk';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
@@ -41,6 +43,56 @@ const ProfileScreen = (props) => {
     });
   }, [userId, userType]);
 
+  const checkPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission Required',
+          message: 'App needs access to your storage to download Photos',
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Storage Permission Granted.');
+        downloadImage();
+      } else {
+        alert('Storage Permission Not Granted');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+  const downloadImage = async () => {
+    let date = new Date();
+    let image_URL = user.imageURI;
+    let ext = getExtention(image_URL);
+    ext = '.' + ext[0];
+    if (ext.slice(-1) == '?') ext = ext.slice(0, -1);
+    const { config, fs } = RNFetchBlob;
+    let PictureDir = fs.dirs.PictureDir;
+    let options = {
+      fileCache: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        path: PictureDir + '/image_' + Math.floor(date.getTime() + date.getSeconds() / 2) + ext,
+        description: 'File downloaded',
+      },
+    };
+
+    config(options)
+      .fetch('GET', image_URL)
+      .then(res => {
+        console.log('The file saved to', res.path());
+      });
+  };
+
+  const getExtention = filename => {
+    return /[.]/.exec(filename) ?
+            /[^.]+[?|$]/.exec(filename) : undefined;
+  };
+
   React.useEffect(() => {
     setIsLoading(user === undefined);
   }, [user]);
@@ -61,7 +113,8 @@ const ProfileScreen = (props) => {
             setIsLoading={setIsLoading}
             userRef={userRef}
             userType={userType}
-            user={user} />
+            user={user}
+            checkPermission={checkPermission} />
         )
       }
     </View>
@@ -69,7 +122,7 @@ const ProfileScreen = (props) => {
 };
 
 const EmptyProfile = (props) => {
-  const { navigation, userType } = props;
+  const { navigation, userType, downloadImage } = props;
 
   return (
     <>
@@ -99,7 +152,7 @@ const EmptyProfile = (props) => {
 };
 
 const ExistProfile = (props) => {
-  const { navigation, setIsLoading, userRef, user, userType } = props;
+  const { navigation, setIsLoading, userRef, user, userType, checkPermission } = props;
 
   const [removeModalVisible, setRemoveModalVisible] = React.useState(false);
 
@@ -113,6 +166,14 @@ const ExistProfile = (props) => {
         removeModalVisible={removeModalVisible}
         setRemoveModalVisible={setRemoveModalVisible}
       />
+
+      <TouchableOpacity
+        style={styles.createButton}
+        activeOpacity={0.8}
+        underlayColor='#DF6D4F'
+        onPress={checkPermission}>
+        <Text style={styles.buttonText}>Download Gambar</Text>
+      </TouchableOpacity>
 
       <DescriptionBottomSheet
         snapPoints={[88, SCREEN_HEIGHT - 198]}>
@@ -346,5 +407,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginTop: 25,
-  }
+  },
+  downloadButton: {
+    marginTop: 15,
+    backgroundColor: '#FF8D6F',
+    width: 200,
+    alignSelf: 'center',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 15,
+  },
 });

@@ -1,14 +1,12 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Button, StatusBar, Text, ToastAndroid } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
+import { Button, StatusBar, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { debounce, throttle } from 'lodash';
 
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -33,22 +31,6 @@ const ProfileStack = createStackNavigator();
 const App = () => {
   const [initializing, setInitializing] = React.useState(true);
   const [user, setUser] = React.useState();
-
-  const onConnectionChanged = debounce((isConnected) => {
-    ToastAndroid.show('You are ' + (isConnected ? 'online!' : 'offline!'), ToastAndroid.SHORT);
-  }, 2000);
-  
-  React.useEffect(() => {
-    NetInfo.configure({
-      reachabilityLongTimeout: 10 * 1000, // 10s
-      reachabilityShortTimeout: 3 * 1000, // 3s
-      reachabilityRequestTimeout: 5 * 1000, // 5s
-    })
-
-    const unsubscribe = NetInfo.addEventListener(state => {
-      onConnectionChanged(state.isConnected);
-    });
-  }, []);
 
   const onAuthStateChanged = (user) => {
     setUser(user);
