@@ -2,7 +2,7 @@
  * @format
  */
 
-import {AppRegistry} from 'react-native';
+import { AppRegistry, Linking } from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
 import PushNotification from 'react-native-push-notification';
@@ -27,10 +27,12 @@ PushNotification.configure({
     console.log("NOTIFICATION:", notification);
     
     if (notification.action === "Gallery") {
-      console.log('open gallery');
+      try {
+        Linking.openURL('content://media/internal/images/media');
+      } catch (e) {
+        console.warn(e.message);
+      }
     }
-
-    // notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
   onAction: function (notification) {
     console.log("ACTION:", notification.action);
