@@ -197,6 +197,10 @@ dependencies {
 
     implementation project(path: ':react-native-image-picker')
 
+    implementation project(':react-native-push-notification')
+
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {

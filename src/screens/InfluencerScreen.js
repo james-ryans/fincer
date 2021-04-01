@@ -12,9 +12,7 @@ const InfluencerScreen = (props) => {
   const { navigation } = props;
 
   const [isLoading, setIsLoading] = React.useState(true);
-
   const [premiumCarouselItems, setPremiumCarouselItems] = React.useState();
-
   const [categoryCarousel, setCategoryCarousel] = React.useState();
 
   React.useEffect(() => {
