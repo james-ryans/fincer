@@ -11,6 +11,7 @@ import { ErrorMessage, Formik } from 'formik';
 import * as Yup from 'yup';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { FinishedCreateProfileNotification } from '../services/NotificationController';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
 
@@ -105,8 +106,6 @@ const ProfileUpdateScreen = (props) => {
           .required('Required'),
       })}
       onSubmit={(values, actions) => {
-        setIsLoading(true);
-
         const imageType = values.imageURI.split('.').pop().split('?').shift();
 
         const storagePutFile = async () => {
@@ -145,6 +144,7 @@ const ProfileUpdateScreen = (props) => {
                 })
                 .then(() => {
                   actions.setSubmitting(false);
+                  FinishedCreateProfileNotification();
                   navigation.navigate('Profile');
                 });
             });

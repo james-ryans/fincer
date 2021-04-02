@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
 import { TouchableOpacityComponent } from 'react-native';
 import { rgb } from 'chalk';
+import { FinishedDeleteProfileNotification } from '../services/NotificationController';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
 
@@ -112,6 +113,7 @@ const ExistProfile = (props) => {
         userRef={userRef}
         removeModalVisible={removeModalVisible}
         setRemoveModalVisible={setRemoveModalVisible}
+        setIsLoading={setIsLoading}
       />
 
       <DescriptionBottomSheet
@@ -165,7 +167,7 @@ const ExistProfile = (props) => {
 };
 
 const ProfileModal = (props) => {
-  const { name, userRef, removeModalVisible, setRemoveModalVisible } = props;
+  const { name, userRef, removeModalVisible, setRemoveModalVisible, setIsLoading } = props;
 
   return (
     <Modal
@@ -186,6 +188,7 @@ const ProfileModal = (props) => {
                 onPress={() => {
                   setIsLoading(true);
                   userRef.remove();
+                  FinishedDeleteProfileNotification();
                   setRemoveModalVisible(false);
                 }}>
                 <Text style={styles.buttonText}>OK</Text>

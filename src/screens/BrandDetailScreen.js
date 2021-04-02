@@ -23,6 +23,10 @@ const BrandDetailScreen = (props) => {
             }}>
             <Icon style={styles.backIcon} name='arrow-left' size={32} />
             </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+                onPress={() => DownloadImage(data)}>
+                <Icon style={styles.backIcon} name='download' size={32} />
+            </TouchableWithoutFeedback>
         </ImageBackground>
 
         <DescriptionBottomSheet
@@ -56,6 +60,7 @@ const styles = StyleSheet.create({
     imageBackground: {
         width: '100%',
         flex: 1,
+        flexDirection: 'row',
         justifyContent: 'space-between',
     },
     backIcon: {
@@ -65,6 +70,14 @@ const styles = StyleSheet.create({
         textShadowColor: '#A2A2A2',
         textShadowRadius: 16,
     },
+    downloadIcon: {
+        alignSelf: 'flex-end',
+        margin: 16,
+        color: '#FFFFFF',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowColor: '#A2A2A2',
+        textShadowRadius: 16,
+      },
     sheetContainer: {
         backgroundColor: '#FFFFFF',
         paddingHorizontal: 24,

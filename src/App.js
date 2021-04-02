@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import notifee, { EventType } from '@notifee/react-native';
 
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -21,6 +22,7 @@ import BrandFilterScreen from './screens/BrandFilterScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
 import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
+import { Linking } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,6 +33,17 @@ const ProfileStack = createStackNavigator();
 const App = () => {
   const [initializing, setInitializing] = React.useState(true);
   const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    return notifee.onForegroundEvent(({ type, detail }) => {
+      const { notification, pressAction } = detail;
+
+      if (type === EventType.ACTION_PRESS && pressAction.id === 'gallery') {
+        Linking.openURL('content://media/internal/images/media');
+        notifee.cancelNotification(notification.id);
+      }
+    });
+  }, []);
 
   const onAuthStateChanged = (user) => {
     setUser(user);
