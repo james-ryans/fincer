@@ -6,6 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Feather';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
+import DownloadImage from '../services/DownloadImageController';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('screen');
 

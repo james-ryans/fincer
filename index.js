@@ -9,6 +9,7 @@ import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import { Linking } from 'react-native';
 import invokeApp from 'react-native-invoke-app';
 
+// pembuatan channel "download-channel-id" dan "profile-channel-id"
 notifee.createChannel({
   id: 'download-channel-id',
   name: 'Downloads',
