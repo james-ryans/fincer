@@ -1016,6 +1016,11 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@notifee/react-native@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@notifee/react-native/-/react-native-1.3.0.tgz#8e517d950d7cccd97bdc1ea3a3c7ef8946591b20"
+  integrity sha512-s5q3qvQZxsLNBQfi5WxzXvozI36xj/U93C5YeiciKbbRuvc+ohTsq4KMImYq7vxOsGDSq1Bj0Dhe1FKmc9oOnA==
+
 "@react-native-community/cli-debugger-ui@^4.13.1":
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.13.1.tgz"

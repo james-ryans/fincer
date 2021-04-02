@@ -4,6 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/Feather';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
+import DownloadImage from '../services/DownloadImageController';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('screen');
 
@@ -19,6 +20,10 @@ const InfluencerDetailScreen = (props) => {
         <TouchableWithoutFeedback
           onPress={() => { navigation.navigate('Influencer') }}>
           <Icon style={styles.backIcon} name='arrow-left' size={32} />
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => DownloadImage(data)}>
+          <Icon style={styles.backIcon} name='download' size={32} />
         </TouchableWithoutFeedback>
       </ImageBackground>
 
@@ -53,9 +58,18 @@ const styles = StyleSheet.create({
   imageBackground: {
     width: '100%',
     flex: 1,
+    flexDirection: 'row',
     justifyContent: 'space-between',
   },
   backIcon: {
+    margin: 16,
+    color: '#FFFFFF',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: '#A2A2A2',
+    textShadowRadius: 16,
+  },
+  downloadIcon: {
+    alignSelf: 'flex-end',
     margin: 16,
     color: '#FFFFFF',
     textShadowOffset: { width: 0, height: 0 },

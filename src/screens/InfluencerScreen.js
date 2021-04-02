@@ -58,7 +58,10 @@ const InfluencerScreen = (props) => {
               influencerSnapshot.forEach((snapshot) => {
                 influencers = influencers.map((influencer) => {
                   if (influencer.key === snapshot.val().category) {
-                    influencer.items.push(snapshot.val());
+                    influencer.items.push({
+                      ...snapshot.val(),
+                      uid: snapshot.key,
+                    });
                   }
                   return influencer;
                 });
