@@ -1,4 +1,4 @@
-import notifee, { AndroidBadgeIconType, AndroidColor, AndroidImportance, AndroidStyle } from '@notifee/react-native';
+import notifee, { TimestampTrigger, TriggerType, AndroidBadgeIconType, AndroidColor, AndroidImportance, AndroidStyle } from '@notifee/react-native';
 
 const FinishedDownloadNotification = async () => {
   await notifee.displayNotification({
@@ -50,4 +50,26 @@ const FinishedDeleteProfileNotification = async () => {
   });
 }
 
-export { FinishedDownloadNotification, FinishedCreateProfileNotification, FinishedDeleteProfileNotification };
+const ReminderTimerNotification = async (hour, minute) => {
+  const trigger: TimestampTrigger = {
+    type: TriggerType.TIMESTAMP,
+    timestamp: Date.now() + Math.max(30, hour * 3600 + minute * 60) * 1000,
+  };
+
+  await notifee.createTriggerNotification({
+    title: '<p><b>Reminder Create/Update Profile</b></p>',
+    body: 'Maybe you should try create/update your profile again now.',
+    android: {
+      channelId: 'profile-channel-id',
+      smallIcon: 'ic_launcher_round',
+      importance: AndroidImportance.HIGH,
+    },
+  }, trigger);
+};
+
+export { 
+  FinishedDownloadNotification, 
+  FinishedCreateProfileNotification, 
+  FinishedDeleteProfileNotification,
+  ReminderTimerNotification,
+};

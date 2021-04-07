@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, ImageBackground, View, Text, TextInput, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, ImageBackground, Modal, Button, View, Text, TextInput, Dimensions, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
@@ -10,8 +10,7 @@ import { Picker } from '@react-native-picker/picker';
 import { ErrorMessage, Formik } from 'formik';
 import * as Yup from 'yup';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { FinishedCreateProfileNotification } from '../services/NotificationController';
+import { ReminderTimerNotification, FinishedCreateProfileNotification } from '../services/NotificationController';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
 
@@ -25,6 +24,8 @@ const ProfileUpdateScreen = (props) => {
   const [user, setUser] = React.useState(route.params?.user);
 
   const [categories, setCategories] = React.useState();
+
+  const [timerModalVisible, setTimerModalVisible] = React.useState(false);
 
   React.useEffect(() => {
     let isSubscribed = user === undefined;
@@ -116,6 +117,7 @@ const ProfileUpdateScreen = (props) => {
         };
 
         const databasePutData = () => {
+          console.log('ea');
           storage()
             .ref(`/${userType}/${userId}.${imageType}`)
             .getDownloadURL()
@@ -147,6 +149,9 @@ const ProfileUpdateScreen = (props) => {
                   FinishedCreateProfileNotification();
                   navigation.navigate('Profile');
                 });
+            })
+            .catch((err) => {
+              setTimerModalVisible(true);
             });
         };
 
@@ -161,6 +166,12 @@ const ProfileUpdateScreen = (props) => {
           <ImageBackground
             style={styles.imageBackground}
             source={{ uri : formik.values.imageURI == '' ? null : formik.values.imageURI }}>
+            <TimerModal
+              timerModalVisible={timerModalVisible}
+              setTimerModalVisible={setTimerModalVisible}
+              navigation={navigation}
+            />
+
             <TouchableWithoutFeedback
               onPress={() => { navigation.navigate('Profile') }}>
               <Icon style={styles.backIcon} name='arrow-left' size={32} />
@@ -297,6 +308,86 @@ const ProfileUpdateScreen = (props) => {
   )
 };
 
+const TimerModal = (props) => {
+  const { timerModalVisible, setTimerModalVisible, navigation } = props;
+
+  const [hour, setHour] = React.useState(0);
+  const [minute, setMinute] = React.useState(0);
+
+  const onSetHour = (text) => {
+    if (text !== '' && !Number.isNaN(text)) {
+      setHour(Math.min(23, Math.max(0, parseInt(text))));
+    } else {
+      setHour(0);
+    }
+  };
+
+  const onSetMinute = (text) => {
+    if (text !== '' && !Number.isNaN(text)) {
+      setMinute(Math.min(59, Math.max(0, parseInt(text))));
+    } else {
+      setMinute(0);
+    }
+  };
+
+  return (
+    <Modal
+        animationType='fade'
+        transparent={true}
+        visible={timerModalVisible}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.boldModalText}>Internet anda tampaknya sedang lambat.</Text>
+            <Text>Cobalah beberapa saat lagi.</Text>
+            <Text></Text>
+            <Text>Mungkin anda membutuhkan alarm pengingat?</Text>
+
+            <View style={styles.rowView}>
+              <View>
+                <TextInput
+                  style={styles.timeTextInput}
+                  textAlign='center'
+                  keyboardType='numeric'
+                  placeholderTextColor='#4F4F4F'
+                  onChangeText={onSetHour}
+                  value={hour.toString()}/>
+                <Text>Jam</Text>
+              </View>
+
+              <View>
+                <TextInput
+                  style={styles.timeTextInput}
+                  textAlign='center'
+                  keyboardType='numeric'
+                  placeholderTextColor='#4F4F4F'
+                  onChangeText={onSetMinute}
+                  value={minute.toString()}/>
+                <Text>Menit</Text>
+              </View>
+            </View>
+
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                style={styles.cancelModalButton}
+                onPress={() => { setTimerModalVisible(false); }}>
+                <Text style={styles.removeButtonText}>Batal</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.acceptModalButton}
+                onPress={() => {
+                  setTimerModalVisible(false);
+                  ReminderTimerNotification(hour, minute);
+                  navigation.navigate('Profile');
+                }}>
+                <Text style={styles.buttonText}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+  );
+}
+
 export default ProfileUpdateScreen;
 
 const styles = StyleSheet.create({
@@ -308,6 +399,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     marginTop: (SCREEN_HEIGHT) / 2 - 100 - 48,
+  },
+  rowView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  timeTextInput: {
+    marginEnd: 10,
+    backgroundColor: '#F2F2F2',
+    color: '#222832',
+    fontSize: 16,
+    borderRadius: 8,
+    padding: 12,
+    paddingHorizontal: 8,
+    marginTop: 16,
+    width: 50,
+    height: 48,
+    textAlignVertical: 'top',
   },
   addImage: {
     alignSelf: 'center',
@@ -374,14 +482,71 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 10,
+    fontSize: 14,
     color: '#FFFFFF',
     textAlign: 'center',
   },
+  removeButtonText: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: 14,
+    color: 'black',
+  },
   cancelButtonText: {
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 10,
+    fontSize: 14,
     color: '#FF0000',
     textAlign: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  modalView: {
+    width: SCREEN_WIDTH * 4 / 5,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 25,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  boldModalText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 25,
+  },
+  acceptModalButton: {
+    backgroundColor: '#FF8D6F',
+    width: 70,
+    height: 30,
+    alignSelf: 'center',
+    alignItems: 'center',
+    padding: 6,
+    borderRadius: 8,
+    marginLeft: 16,
+  },
+  cancelModalButton: {
+    backgroundColor: '#FFFFFF',
+    width: 70,
+    height: 30,
+    alignSelf: 'center',
+    alignItems: 'center',
+    padding: 6,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FF0000',
   },
 });
