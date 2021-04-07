@@ -18,6 +18,8 @@ target 'fincer' do
 
   pod 'RNDateTimePicker', :path => '../node_modules/@react-native-community/datetimepicker'
 
+  pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
+
   target 'fincerTests' do
     inherit! :complete
     # Pods for testing

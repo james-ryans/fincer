@@ -6,8 +6,10 @@ import {AppRegistry} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
-import { Linking } from 'react-native';
+import { Linking, LogBox } from 'react-native';
 import invokeApp from 'react-native-invoke-app';
+
+LogBox.ignoreAllLogs();
 
 // pembuatan channel "download-channel-id" dan "profile-channel-id"
 notifee.createChannel({

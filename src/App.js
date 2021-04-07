@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Button, StatusBar, Text } from 'react-native';
+import { Button, StatusBar, Text, Linking } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { NavigationContainer, getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -20,14 +20,16 @@ import BrandScreen from './screens/BrandScreen';
 import BrandDetailScreen from './screens/BrandDetailScreen';
 import BrandFilterScreen from './screens/BrandFilterScreen';
 
+import NewsScreen from './screens/NewsScreen';
+
 import ProfileScreen from './screens/ProfileScreen';
 import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
-import { Linking } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const InfluencerStack = createStackNavigator();
 const BrandStack = createStackNavigator();
+const NewsStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 
 const App = () => {
@@ -77,6 +79,10 @@ const App = () => {
                     iconName = focused 
                       ? 'briefcase-sharp' 
                       : 'briefcase-outline';
+                  } else if (route.name === 'NewsTab') {
+                    iconName = focused
+                      ? 'newspaper'
+                      : 'newspaper-outline'
                   } else if (route.name === 'ProfileTab') {
                     iconName = focused
                       ? 'person-circle'
@@ -120,6 +126,14 @@ const App = () => {
                     <BrandStack.Screen name="BrandDetail" component={BrandDetailScreen} />
                     <BrandStack.Screen name="BrandFilter" component={BrandFilterScreen} />
                   </BrandStack.Navigator>
+                )}
+              </Tab.Screen>
+              <Tab.Screen 
+                name="NewsTab">
+                {() => (
+                  <NewsStack.Navigator screenOptions={{ headerShown: false }}>
+                    <NewsStack.Screen name="News" component={NewsScreen} />
+                  </NewsStack.Navigator>
                 )}
               </Tab.Screen>
               <Tab.Screen 
