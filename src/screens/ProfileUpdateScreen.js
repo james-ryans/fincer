@@ -117,7 +117,6 @@ const ProfileUpdateScreen = (props) => {
         };
 
         const databasePutData = () => {
-          console.log('ea');
           storage()
             .ref(`/${userType}/${userId}.${imageType}`)
             .getDownloadURL()
