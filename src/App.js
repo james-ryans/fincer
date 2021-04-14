@@ -24,8 +24,9 @@ import NewsScreen from './screens/NewsScreen';
 
 import ProfileScreen from './screens/ProfileScreen';
 import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
+import GalleryScreen from './screens/GalleryScreen';
 
-import { navigationRef } from './RootNavigation';
+import * as RootNavigation from './RootNavigation';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,6 +42,10 @@ const App = () => {
   React.useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
       const { notification, pressAction } = detail;
+
+      if (type === EventType.PRESS) {
+        RootNavigation.navigate('ProfileTab');
+      }
 
       if (type === EventType.ACTION_PRESS && pressAction.id === 'gallery') {
         Linking.openURL('content://media/internal/images/media');
@@ -61,7 +66,7 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer ref={RootNavigation.navigationRef}>
         <StatusBar hidden />
         { !user ? (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -147,6 +152,7 @@ const App = () => {
                   <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
                     <ProfileStack.Screen name="Profile" component={ProfileScreen} />
                     <ProfileStack.Screen name="ProfileUpdate" component={ProfileUpdateScreen} />
+                    <ProfileStack.Screen name="Gallery" component={GalleryScreen} />
                   </ProfileStack.Navigator>
                 )}
               </Tab.Screen>

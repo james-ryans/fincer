@@ -116,6 +116,12 @@ const ExistProfile = (props) => {
         setIsLoading={setIsLoading}
       />
 
+      <View style={styles.topBar}>
+        <Icon style={styles.image} name='image' size={48} onPress={() => {
+          navigation.navigate('Gallery');
+        }} />
+      </View>
+
       <DescriptionBottomSheet
         snapPoints={[88, SCREEN_HEIGHT - 198]}>
         <View></View>
@@ -210,6 +216,16 @@ const styles = StyleSheet.create({
   },
   noImage: {
     marginTop: (SCREEN_HEIGHT - 94 - 128 - 48) / 2,
+    color: '#FFFFFF',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: '#A2A2A2',
+    textShadowRadius: 16,
+  },
+  topBar: {
+    flexDirection: 'row-reverse',
+  },
+  image: {
+    margin: 16,
     color: '#FFFFFF',
     textShadowOffset: { width: 0, height: 0 },
     textShadowColor: '#A2A2A2',

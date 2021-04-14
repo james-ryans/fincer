@@ -20,6 +20,8 @@ target 'fincer' do
 
   pod 'react-native-background-timer', :path => '../node_modules/react-native-background-timer'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'fincerTests' do
     inherit! :complete
     # Pods for testing

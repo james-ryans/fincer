@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Dimensions, Button, TouchableHighlight, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Button, TouchableHighlight, ScrollView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import database from '@react-native-firebase/database';
 import { debounce, throttle } from 'lodash';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import TopSearchBar from '../components/TopSearchBar';
 import PremiumCarousel from '../components/PremiumCarousel';
 import CategoryCarousel from '../components/CategoryCarousel';
+import { PermissionsAndroid } from 'react-native';
 
 const InfluencerScreen = (props) => {
   const { navigation } = props;
 
   const [isLoading, setIsLoading] = React.useState(true);
-
   const [premiumCarouselItems, setPremiumCarouselItems] = React.useState();
-
   const [categoryCarousel, setCategoryCarousel] = React.useState();
 
   React.useEffect(() => {
@@ -127,5 +127,9 @@ const styles = StyleSheet.create({
   },
   categoryCarousel: {
     marginBottom: 40,
+  },
+  gambar: {
+    width: '100%',
+    height: 100,
   },
 });
