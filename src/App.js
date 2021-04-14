@@ -25,6 +25,8 @@ import NewsScreen from './screens/NewsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
 
+import { navigationRef } from './RootNavigation';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const InfluencerStack = createStackNavigator();
@@ -59,7 +61,7 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         <StatusBar hidden />
         { !user ? (
             <Stack.Navigator screenOptions={{ headerShown: false }}>
