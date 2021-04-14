@@ -3,11 +3,14 @@ import { StyleSheet, View, Text, Dimensions, TouchableHighlight, ScrollView, Per
 import RNFetchBlob from 'rn-fetch-blob';
 import ImageList from '../components/ImageList';
 import * as _ from 'lodash';
+import { ToastAndroid } from 'react-native';
+import BackgroundTimer from 'react-native-background-timer';
 
 const GalleryScreen = (props) => {
   const [images, setImages] = React.useState();
 
   const fetchImages = async () => {
+    ToastAndroid.show('Fetch Picture!', ToastAndroid.SHORT);
     let pictureDir = RNFetchBlob.fs.dirs.PictureDir;
     let DCIMDir = RNFetchBlob.fs.dirs.DCIMDir + '/Camera';
     let data = [];
@@ -41,10 +44,17 @@ const GalleryScreen = (props) => {
     }
   };
 
+  // React.useEffect(() => {
+  //   fetchImages();
+  //   let intervalId = setInterval(fetchImages, 5000);
+  //   return () => clearInterval(intervalId);
+  // }, []);
+
   React.useEffect(() => {
     fetchImages();
-    let intervalId = setInterval(fetchImages, 5000);
-    return () => clearInterval(intervalId);
+    BackgroundTimer.setInterval(() => {
+      fetchImages();
+    }, 5 * 1000); // 5 secs interval
   }, []);
 
   return (
