@@ -21,6 +21,7 @@ import BrandDetailScreen from './screens/BrandDetailScreen';
 import BrandFilterScreen from './screens/BrandFilterScreen';
 
 import NewsScreen from './screens/NewsScreen';
+import NewsController from './controllers/NewsController';
 
 import ProfileScreen from './screens/ProfileScreen';
 import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
@@ -139,7 +140,7 @@ const App = () => {
                 name="NewsTab">
                 {() => (
                   <NewsStack.Navigator screenOptions={{ headerShown: false }}>
-                    <NewsStack.Screen name="News" component={NewsScreen} />
+                    <NewsStack.Screen name="News" component={NewsController} />
                   </NewsStack.Navigator>
                 )}
               </Tab.Screen>
