@@ -43,6 +43,7 @@ const SignInScreen = ({ navigation, route }) => {
               <Text style={styles.titleDesc}>finding influencer</Text>
       
               <TextInput
+                testID='email-text-input'
                 style={styles.textInput}
                 placeholder='E-mail'
                 placeholderTextColor='#222832'
@@ -50,10 +51,11 @@ const SignInScreen = ({ navigation, route }) => {
                 onBlur={formik.handleBlur('email')}
                 value={formik.values.email}/>
               { formik.touched.email && formik.errors.email &&
-                <Text style={styles.errorText}>{ formik.errors.email }</Text>
+                <Text testID='email-warning' style={styles.errorText}>{ formik.errors.email }</Text>
               }
               
               <TextInput
+                testID='password-text-input'
                 style={styles.textInput}
                 placeholder='Kata Sandi'
                 placeholderTextColor='#222832'
@@ -62,7 +64,7 @@ const SignInScreen = ({ navigation, route }) => {
                 onBlur={formik.handleBlur('password')}
                 value={formik.values.password}/>
               { formik.touched.password && formik.errors.password &&
-                <Text style={styles.errorText}>{ formik.errors.password }</Text>
+                <Text testID='password-warning' style={styles.errorText}>{ formik.errors.password }</Text>
               }
       
               <View style={styles.centeredText}>
