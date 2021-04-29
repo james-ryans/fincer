@@ -4,6 +4,7 @@
  */
 
 module.exports = {
+  verbose: true,
   preset: "react-native",
   moduleDirectories: [
     "node_modules",

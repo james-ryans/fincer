@@ -16,6 +16,7 @@ const CategoryCarousel = (props) => {
   const renderItem = ({ item, index }) => {
     return (
       <TouchableWithoutFeedback
+        testID={`card-${index}`}
         onPress={() => { navigation.navigate(navigateTo, {
           data: item,
         }); }}>

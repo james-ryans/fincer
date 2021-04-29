@@ -7,7 +7,23 @@ import * as Yup from 'yup';
 
 import HomeScreen from './InfluencerScreen';
 
-const SignInScreen = ({ navigation, route }) => {
+const SignInScreen = (props) => {
+  const { navigation, route, onSubmit = formikOnSubmit } = props;
+
+  const formikOnSubmit = (values, actions) => {
+    actions.setSubmitting(false);
+    auth()
+      .signInWithEmailAndPassword(values.email, values.password)
+      .catch((error) => {
+        if (error.code === 'auth/user-not-found') {
+          actions.setFieldError('email', 'Couldn\'t find your email address');
+        };
+        if (error.code === 'auth/wrong-password') {
+          actions.setFieldError('password', 'Wrong password');
+        };
+      });
+  };
+
   return (
     <Formik
       initialValues={{
@@ -22,19 +38,7 @@ const SignInScreen = ({ navigation, route }) => {
           .min(6, 'Must be 6 characters or more')
           .required('Required'),
       })}
-      onSubmit={(values, actions) => {
-        actions.setSubmitting(false);
-        auth()
-          .signInWithEmailAndPassword(values.email, values.password)
-          .catch((error) => {
-            if (error.code === 'auth/user-not-found') {
-              actions.setFieldError('email', 'Couldn\'t find your email address');
-            }
-            if (error.code === 'auth/wrong-password') {
-              actions.setFieldError('password', 'Wrong password');
-            }
-          })
-      }}>
+      onSubmit={onSubmit}>
       {formik => (
         <View style={styles.container}>
           <ImageBackground source={require('../assets/images/sign_in_wallpaper.png')} style={styles.background}>
@@ -70,12 +74,14 @@ const SignInScreen = ({ navigation, route }) => {
               <View style={styles.centeredText}>
                 <Text style={styles.blackText}>tidak memiliki akun? </Text>
                 <Pressable
+                  testID='sign-up-button'
                   onPress={() => navigation.navigate('SignUp')}>
                   <Text style={styles.orangeText}>ayo daftar</Text>
                 </Pressable>
               </View>
       
               <TouchableOpacity
+                testID='submit-button'
                 onPress={formik.handleSubmit}>
                 <View style={styles.button}>
                   <Text style={styles.buttonText}>MASUK</Text>
