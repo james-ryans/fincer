@@ -31,6 +31,47 @@ const category = {
   ]
 };
 
+// 6. behaviour dari button next dan previous bekerja dengan baik
+// button next disabled ketika tampilan card sedang di paling terakhir
+// button previous ketika tampilan card sedang di paling awal
+describe('category carousel next & previous button work correctly', () => {
+  let props, container;
+  beforeEach(() => {
+    props = createCategoryCarouselProps({});
+    container = render(<CategoryCarousel {...props} />);
+  });
+
+  test('Test case: previous button should disabled when index = 0', async() => {
+    const previousButton = container.getByTestId('previous-button');
+    const nextButton = container.getByTestId('next-button');
+
+    expect(previousButton.props.disabled).toBe(true);
+
+    await waitFor(() => {
+      fireEvent.press(nextButton);
+    });
+    
+    expect(previousButton.props.disabled).toBe(false);
+  });
+
+  test('Test case: next button should disabled when index = x-1', async() => {
+    const previousButton = container.getByTestId('previous-button');
+    const nextButton = container.getByTestId('next-button');
+
+    expect(nextButton.props.disabled).toBe(false);
+
+    await waitFor(() => {
+      fireEvent.press(nextButton);
+    });
+    await waitFor(() => {
+      fireEvent.press(nextButton);
+    });
+    
+    expect(previousButton.props.disabled).toBe(true);
+  });
+})
+
+// 5. category carousel menampilkan data sesuai yang diinginkan
 describe('check category carousel displays data correctly', () => {
   let props, container;
   beforeEach(() => {
@@ -68,6 +109,7 @@ describe('check category carousel displays data correctly', () => {
   });
 });
 
+// 4. navigasi ke InfluencerDetailScreen card jika di klik
 describe('press category carousel card navigate to InfluencerDetailScreen with data', () => {
   test.each([
     [0, category.items[0].name, category.items[0]],

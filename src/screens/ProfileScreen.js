@@ -19,7 +19,7 @@ const ProfileScreen = (props) => {
   const userId = auth().currentUser.uid;
   const [userType, setUserType] = React.useState();
   const [userRef, setUserRef] = React.useState();
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState(route.params?.user);
 
   React.useEffect(() => {
     (async () => {
@@ -50,6 +50,18 @@ const ProfileScreen = (props) => {
     return null;
   }
 
+  if (!user) {
+    return <EmptyProfile
+      navigation={navigation}
+      userType={userType} />
+  } else {
+    return <ExistProfile
+      navigation={navigation}
+      setIsLoading={setIsLoading}
+      userRef={userRef}
+      userType={userType}
+      user={user} />
+  }
   return (
     <View style={styles.container}>
       { !user ? (
@@ -73,7 +85,9 @@ const EmptyProfile = (props) => {
   const { navigation, userType, downloadImage } = props;
 
   return (
-    <>
+    <View
+      testID='empty-profile'
+      style={styles.container}>
       <Icon style={styles.noImage} name='no-photography' size={48} />
 
       <DescriptionBottomSheet
@@ -95,7 +109,7 @@ const EmptyProfile = (props) => {
           <Text style={styles.buttonText}>Keluar</Text>
         </TouchableOpacity>
       </DescriptionBottomSheet>
-    </>
+    </View>
   )
 };
 
@@ -105,70 +119,75 @@ const ExistProfile = (props) => {
   const [removeModalVisible, setRemoveModalVisible] = React.useState(false);
 
   return (
-    <ImageBackground
-    style={styles.imageBackground}
-    source={{ uri : user.imageURI }}>
-      <ProfileModal 
-        name={user.name}
-        userRef={userRef}
-        removeModalVisible={removeModalVisible}
-        setRemoveModalVisible={setRemoveModalVisible}
-        setIsLoading={setIsLoading}
-      />
+    <View 
+      testID='exist-profile'
+      style={styles.container}>
+      <ImageBackground
+      style={styles.imageBackground}
+      source={{ uri : user?.imageURI }}>
+        <ProfileModal 
+          name={user?.name}
+          userRef={userRef}
+          removeModalVisible={removeModalVisible}
+          setRemoveModalVisible={setRemoveModalVisible}
+          setIsLoading={setIsLoading}
+        />
 
-      <View style={styles.topBar}>
-        <Icon style={styles.image} name='image' size={48} onPress={() => {
-          navigation.navigate('Gallery');
-        }} />
-      </View>
+        <View style={styles.topBar}>
+          <Icon style={styles.image} name='image' size={48} onPress={() => {
+            navigation.navigate('Gallery');
+          }} />
+        </View>
 
-      <DescriptionBottomSheet
-        snapPoints={[88, SCREEN_HEIGHT - 198]}>
-        <View></View>
-        <View style={styles.topDesc}>
-          <View style={styles.leftDesc}>
-            <Text style={styles.boldText} numberOfLines={1}>{ user.name }</Text>
-            <View style={styles.flexEnd}>
-              <Text style={styles.normalText}>{ user.subcategory }</Text>
-              <Text style={styles.thinText}>{ user.province }, { user.city }</Text>
+        <DescriptionBottomSheet
+          snapPoints={[88, SCREEN_HEIGHT - 198]}>
+          <View></View>
+          <View style={styles.topDesc}>
+            <View style={styles.leftDesc}>
+              <Text style={styles.boldText} numberOfLines={1}>{ user?.name }</Text>
+              <View style={styles.flexEnd}>
+                <Text style={styles.normalText}>{ user?.subcategory }</Text>
+                <Text style={styles.thinText}>{ user?.province }, { user?.city }</Text>
+              </View>
+            </View>
+            <View style={styles.rightDesc}>
+              <Text style={styles.boldText}>Price</Text>
+              <Text style={styles.normalText}>~ Rp. { user?.price }</Text>
             </View>
           </View>
-          <View style={styles.rightDesc}>
-            <Text style={styles.boldText}>Price</Text>
-            <Text style={styles.normalText}>~ Rp. { user.price }</Text>
-          </View>
-        </View>
-        <Text style={styles.descText}>Description</Text>
-        <Text style={styles.desc}>{ user.description }</Text>
+          <Text style={styles.descText}>Description</Text>
+          <Text style={styles.desc}>{ user?.description }</Text>
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.createButton}
-            activeOpacity={0.8}
-            underlayColor='#DF6D4F'
-            onPress={() => { navigation.navigate('ProfileUpdate', {
-              userType: userType,
-              user: user,
-            }); }}>
-            <Text style={styles.buttonText}>Update Profil</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.removeButton}
-            activeOpacity={0.8}
-            underlayColor='#DF0000'
-            onPress={() => { setRemoveModalVisible(true); }}>
-            <Text style={styles.removeButtonText}>Hapus Profil</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.logoutButton}
-            activeOpacity={0.8}
-            underlayColor='#F2F2F2'
-            onPress={() => { auth().signOut(); }}>
-            <Text style={styles.buttonText}>Keluar</Text>
-          </TouchableOpacity>
-        </View>
-      </DescriptionBottomSheet>
-    </ImageBackground>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.createButton}
+              activeOpacity={0.8}
+              underlayColor='#DF6D4F'
+              onPress={() => { navigation.navigate('ProfileUpdate', {
+                userType: userType,
+                user: user,
+              }); }}>
+              <Text style={styles.buttonText}>Update Profil</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              testID='hapus-profile-button'
+              style={styles.removeButton}
+              activeOpacity={0.8}
+              underlayColor='#DF0000'
+              onPress={() => { setRemoveModalVisible(true); }}>
+              <Text style={styles.removeButtonText}>Hapus Profil</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.logoutButton}
+              activeOpacity={0.8}
+              underlayColor='#F2F2F2'
+              onPress={() => { auth().signOut(); }}>
+              <Text style={styles.buttonText}>Keluar</Text>
+            </TouchableOpacity>
+          </View>
+        </DescriptionBottomSheet>
+      </ImageBackground>
+    </View>
   );
 };
 
@@ -177,6 +196,7 @@ const ProfileModal = (props) => {
 
   return (
     <Modal
+        testID='hapus-profile-modal'
         animationType='fade'
         transparent={true}
         visible={removeModalVisible}>
@@ -190,6 +210,7 @@ const ProfileModal = (props) => {
                 <Text style={styles.removeButtonText}>Batal</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                testID='hapus-profile-ok'
                 style={styles.acceptModalButton}
                 onPress={() => {
                   setIsLoading(true);
@@ -207,6 +228,7 @@ const ProfileModal = (props) => {
 }
 
 export default ProfileScreen;
+export { ExistProfile };
 
 const styles = StyleSheet.create({
   container: {

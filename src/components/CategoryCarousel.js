@@ -45,6 +45,7 @@ const CategoryCarousel = (props) => {
         <Text style={styles.titleText}>{props.carouselItems.title}</Text>
         <View style={styles.button}>
           <TouchableHighlight
+            testID='previous-button'
             disabled={activeIndex === 0}
             onPress={() => { carouselRef.snapToPrev(); }}
             style={styles.circleButton}
@@ -52,6 +53,7 @@ const CategoryCarousel = (props) => {
             <Icon name='angle-left' size={24} />
           </TouchableHighlight>
           <TouchableHighlight
+            testID='next-button'
             disabled={activeIndex === carouselItems.length - 1}
             onPress={() => { carouselRef.snapToNext() }}
             style={styles.circleButton}
