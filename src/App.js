@@ -27,6 +27,7 @@ import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
 import GalleryScreen from './screens/GalleryScreen';
 
 import * as RootNavigation from './RootNavigation';
+import PlayInitSound from './services/InitSoundLoop';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -38,6 +39,10 @@ const ProfileStack = createStackNavigator();
 const App = () => {
   const [initializing, setInitializing] = React.useState(true);
   const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    PlayInitSound();
+  }, []);
 
   React.useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
