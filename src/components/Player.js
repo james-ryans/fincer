@@ -26,10 +26,11 @@ const Player = (props) => {
   const [trackTitle, setTrackTitle] = useState("");
   const [trackArtist, setTrackArtist] = useState("");
   const [middleButtonText, setMiddleButtonText] = useState("");
-  useTrackPlayerEvents(['playback-track-changed', 'remote-play'], async event => {
+  useTrackPlayerEvents(['playback-track-changed', 'playback-state'], async (event) => {
     if (event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_TRACK_CHANGED
-        || event.type === TrackPlayer.TrackPlayerEvents.REMOTE_PLAY) {
-      const track = await TrackPlayer.getTrack(event.nextTrack);
+        || event.type === TrackPlayer.TrackPlayerEvents.PLAYBACK_STATE) {
+      const trackId = await TrackPlayer.getCurrentTrack();
+      const track = await TrackPlayer.getTrack(trackId);
       const { title, artist } = track || {};
       setTrackTitle(title);
       setTrackArtist(artist);

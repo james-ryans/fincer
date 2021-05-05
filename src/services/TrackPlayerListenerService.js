@@ -20,4 +20,8 @@ module.exports = async () => {
   TrackPlayer.addEventListener('remote-stop', () => {
     TrackPlayer.destroy()
   });
+
+  TrackPlayer.addEventListener('remote-seek', () => {
+    TrackPlayer.seekTo()
+  });
 };
