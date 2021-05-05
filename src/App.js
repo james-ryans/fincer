@@ -25,9 +25,11 @@ import NewsScreen from './screens/NewsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
 import GalleryScreen from './screens/GalleryScreen';
+import MusicScreen from './screens/MusicScreen';
 
 import * as RootNavigation from './RootNavigation';
 import PlayInitSound from './services/InitSoundLoop';
+import TrackPlayerSetup, { TrackPlayerSetdown } from './services/TrackPlayerService';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,6 +44,14 @@ const App = () => {
 
   React.useEffect(() => {
     PlayInitSound();
+  }, []);
+
+  React.useEffect(() => {
+    TrackPlayerSetup();
+
+    return () => {
+      TrackPlayerSetdown();
+    };
   }, []);
 
   React.useEffect(() => {
@@ -158,6 +168,7 @@ const App = () => {
                     <ProfileStack.Screen name="Profile" component={ProfileScreen} />
                     <ProfileStack.Screen name="ProfileUpdate" component={ProfileUpdateScreen} />
                     <ProfileStack.Screen name="Gallery" component={GalleryScreen} />
+                    <ProfileStack.Screen name="Music" component={MusicScreen} />
                   </ProfileStack.Navigator>
                 )}
               </Tab.Screen>

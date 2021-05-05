@@ -40,6 +40,7 @@
     "react-native-screens": "^2.16.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-sound": "^0.11.0",
+    "react-native-track-player": "^1.2.7",
     "react-native-vector-icons": "^7.1.0",
     "rn-fetch-blob": "^0.12.0",
     "yup": "^0.32.8"

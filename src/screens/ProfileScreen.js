@@ -117,8 +117,11 @@ const ExistProfile = (props) => {
       />
 
       <View style={styles.topBar}>
-        <Icon style={styles.image} name='image' size={48} onPress={() => {
+        <Icon style={styles.image} name='image' size={36} onPress={() => {
           navigation.navigate('Gallery');
+        }} />
+        <Icon style={styles.image} name='music-note' size={36} onPress={() => {
+          navigation.navigate('Music');
         }} />
       </View>
 
@@ -225,7 +228,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   image: {
-    margin: 16,
+    margin: 13,
     color: '#FFFFFF',
     textShadowOffset: { width: 0, height: 0 },
     textShadowColor: '#A2A2A2',

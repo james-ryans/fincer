@@ -6,6 +6,7 @@ import {AppRegistry} from 'react-native';
 import App from './src/App';
 import {name as appName} from './app.json';
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
+import TrackPlayer from 'react-native-track-player';
 import { Linking, LogBox } from 'react-native';
 import invokeApp from 'react-native-invoke-app';
 import { StackActions } from '@react-navigation/routers';
@@ -46,3 +47,4 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
 })
 
 AppRegistry.registerComponent(appName, () => App);
+TrackPlayer.registerPlaybackService(() => require('./src/services/TrackPlayerListenerService'));
