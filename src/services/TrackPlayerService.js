@@ -26,21 +26,19 @@ const TrackPlayerSetup = async () => {
   });
 
   const trackQueue = await AsyncStorage.getItem('track_player_queue');
+  const trackId = await AsyncStorage.getItem('track_player_id');
   const trackPosition = await AsyncStorage.getItem('track_player_position');
-  await TrackPlayer.add(JSON.parse(trackQueue));
-  await TrackPlayer.seekTo(JSON.parse(trackPosition));
-
-  console.log('queue', trackQueue);
-  console.log('pos', trackPosition);
+  await TrackPlayer.add(JSON.parse(trackQueue ?? []));
+  await TrackPlayer.skip(trackId);
+  await TrackPlayer.seekTo(JSON.parse(trackPosition ?? 0));
 };
 const TrackPlayerSetdown = async() => {
   const trackQueue = await TrackPlayer.getQueue();
+  const trackId = await TrackPlayer.getCurrentTrack();
   const trackPosition = await TrackPlayer.getPosition();
   await AsyncStorage.setItem('track_player_queue', JSON.stringify(trackQueue));
+  await AsyncStorage.setItem('track_player_id', trackId);
   await AsyncStorage.setItem('track_player_position', JSON.stringify(trackPosition));
-
-  console.log('queue', trackQueue);
-  console.log('pos', trackPosition);
 
   await TrackPlayer.reset();
   await TrackPlayer.stop();
@@ -49,7 +47,6 @@ const TrackPlayerSetdown = async() => {
 const togglePlayback = async (playbackState) => {
   const currentTrack = await TrackPlayer.getCurrentTrack();
 
-  console.log('current', currentTrack, playbackState);
   if (currentTrack !== null) {
     if (playbackState === TrackPlayer.STATE_PAUSED 
         || playbackState === TrackPlayer.STATE_NONE) {
@@ -66,14 +63,8 @@ const skipToPrevious = async () => {
   await TrackPlayer.skipToPrevious();
 };
 const addToQueue = async (music) => {
-  console.log('music', music);
-
   await TrackPlayer.add(music);
   await TrackPlayer.play();
-
-  await TrackPlayer.getQueue().then((res) => {
-    console.log('queue', res.map(item => item.title));
-  });
 };
 
 export default TrackPlayerSetup;

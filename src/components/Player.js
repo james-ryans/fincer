@@ -59,7 +59,10 @@ const Player = (props) => {
       <ProgressBar />
       <View style={styles.controls}>
         <Icon name='skip-previous' size={36} onPress={onPrevious}/>
-        <Icon name='play-arrow' size={36} onPress={() => onTogglePlayback(playbackState)}/>
+        { playbackState === TrackPlayer.STATE_PLAYING 
+          ? <Icon name='pause' size={36} onPress={() => onTogglePlayback(playbackState)}/>
+          : <Icon name='play-arrow' size={36} onPress={() => onTogglePlayback(playbackState)}/>
+        }
         <Icon name='skip-next' size={36} onPress={onNext}/>
       </View>
     </View>

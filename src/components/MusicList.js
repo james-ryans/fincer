@@ -17,7 +17,8 @@ const MusicList = (props) => {
                   <Text style={styles.musicTitle}>{ item.title }</Text>
                   <Text style={styles.musicArtist}>{ item.artist }</Text>
                 </View>
-                <Icon style={styles.musicIcon} name='queue-music' size={36} onPress={() => addToQueue(item) }/>
+                <Icon style={styles.musicIcon} name='queue-music' size={36} 
+                  onPress={() => addToQueue(item) }/>
               </View>
             </TouchableWithoutFeedback>
           );
