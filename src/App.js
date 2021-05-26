@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import notifee, { EventType } from '@notifee/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
@@ -38,6 +39,10 @@ const ProfileStack = createStackNavigator();
 const App = () => {
   const [initializing, setInitializing] = React.useState(true);
   const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    AsyncStorage.clear();
+  }, []);
 
   React.useEffect(() => {
     return notifee.onForegroundEvent(({ type, detail }) => {
