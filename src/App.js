@@ -25,6 +25,7 @@ import NewsScreen from './screens/NewsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ProfileUpdateScreen from './screens/ProfileUpdateScreen';
 import GalleryScreen from './screens/GalleryScreen';
+import NotesScreen from './screens/NotesScreen';
 
 import * as RootNavigation from './RootNavigation';
 
@@ -153,6 +154,7 @@ const App = () => {
                     <ProfileStack.Screen name="Profile" component={ProfileScreen} />
                     <ProfileStack.Screen name="ProfileUpdate" component={ProfileUpdateScreen} />
                     <ProfileStack.Screen name="Gallery" component={GalleryScreen} />
+                    <ProfileStack.Screen name="Notes" component={NotesScreen} />
                   </ProfileStack.Navigator>
                 )}
               </Tab.Screen>

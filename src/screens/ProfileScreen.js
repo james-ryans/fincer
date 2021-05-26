@@ -108,7 +108,7 @@ const ExistProfile = (props) => {
     <ImageBackground
     style={styles.imageBackground}
     source={{ uri : user.imageURI }}>
-      <ProfileModal 
+      <ProfileModal
         name={user.name}
         userRef={userRef}
         removeModalVisible={removeModalVisible}
@@ -119,6 +119,9 @@ const ExistProfile = (props) => {
       <View style={styles.topBar}>
         <Icon style={styles.image} name='image' size={48} onPress={() => {
           navigation.navigate('Gallery');
+        }} />
+        <Icon style={styles.image} name='notes' size={48} onPress={() => {
+          navigation.navigate('Notes');
         }} />
       </View>
 
@@ -223,6 +226,7 @@ const styles = StyleSheet.create({
   },
   topBar: {
     flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
   },
   image: {
     margin: 16,
