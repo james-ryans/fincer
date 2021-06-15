@@ -1,7 +1,14 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Dimensions, TouchableHighlight, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  TouchableHighlight,
+  ScrollView,
+} from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
-import { FetchNewYorkTimesService } from '../services/FetchNewsService';
+import {FetchNewYorkTimesService} from '../services/FetchNewsService';
 import NewsList from '../components/NewsList';
 
 const NewsScreen = (props) => {
@@ -17,9 +24,7 @@ const NewsScreen = (props) => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollViewContainer}>
-        <NewsList
-          items={news}
-        />
+        <NewsList items={news} />
       </ScrollView>
     </View>
   );
@@ -37,4 +42,4 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 32,
   },
-})
+});
