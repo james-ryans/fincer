@@ -7,26 +7,20 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {AdMobBanner, AdMobInterstitial} from 'react-native-admob';
+import {AdMobBanner} from 'react-native-admob';
 import Image from 'react-native-scalable-image';
 
 const {width: SCREEN_WIDTH} = Dimensions.get('screen');
 
 const NewsList = (props) => {
-  const {items} = props;
-
-  React.useEffect(() => {
-    AdMobInterstitial.setAdUnitID('ca-app-pub-3940256099942544/1033173712');
-    AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
-    AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
-  }, []);
+  const {items, ads} = props;
 
   return (
     <View style={styles.container}>
       {items.map((item, index) => {
         return (
           <>
-            {index % 10 === 0 ? (
+            {ads && index % 10 === 0 ? (
               <AdMobBanner
                 style={styles.banner}
                 adSize="fullBanner"
