@@ -1,18 +1,26 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, ImageBackground, View, Text, Button, Modal, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  ImageBackground,
+  View,
+  Text,
+  Button,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
-import { TouchableOpacityComponent } from 'react-native';
-import { rgb } from 'chalk';
-import { FinishedDeleteProfileNotification } from '../services/NotificationController';
+import {TouchableOpacityComponent} from 'react-native';
+import {rgb} from 'chalk';
 
-const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
+const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('screen');
 
 const ProfileScreen = (props) => {
-  const { navigation, route } = props;
+  const {navigation, route} = props;
 
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -32,8 +40,7 @@ const ProfileScreen = (props) => {
   }, []);
 
   React.useEffect(() => {
-    const ref = database()
-      .ref(`/${userType}/${userId}`);
+    const ref = database().ref(`/${userType}/${userId}`);
 
     setUserRef(ref);
 
@@ -52,63 +59,64 @@ const ProfileScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      { !user ? (
-          <EmptyProfile
-            navigation={navigation}
-            userType={userType} />
-        ) : (
-          <ExistProfile
-            navigation={navigation}
-            setIsLoading={setIsLoading}
-            userRef={userRef}
-            userType={userType}
-            user={user} />
-        )
-      }
+      {!user ? (
+        <EmptyProfile navigation={navigation} userType={userType} />
+      ) : (
+        <ExistProfile
+          navigation={navigation}
+          setIsLoading={setIsLoading}
+          userRef={userRef}
+          userType={userType}
+          user={user}
+        />
+      )}
     </View>
   );
 };
 
 const EmptyProfile = (props) => {
-  const { navigation, userType, downloadImage } = props;
+  const {navigation, userType, downloadImage} = props;
 
   return (
     <>
-      <Icon style={styles.noImage} name='no-photography' size={48} />
+      <Icon style={styles.noImage} name="no-photography" size={48} />
 
-      <DescriptionBottomSheet
-        snapPoints={[128]}>
+      <DescriptionBottomSheet snapPoints={[128]}>
         <TouchableOpacity
           style={styles.createButton}
           activeOpacity={0.8}
-          underlayColor='#DF6D4F'
-          onPress={() => { navigation.navigate('ProfileUpdate', {
-            userType: userType,
-          }); }}>
+          underlayColor="#DF6D4F"
+          onPress={() => {
+            navigation.navigate('ProfileUpdate', {
+              userType: userType,
+            });
+          }}>
           <Text style={styles.buttonText}>Buat Profil</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.logoutButton}
           activeOpacity={0.8}
-          underlayColor='#DF0000'
-          onPress={() => { auth().signOut(); }}>
+          underlayColor="#DF0000"
+          onPress={() => {
+            auth().signOut();
+          }}>
           <Text style={styles.buttonText}>Keluar</Text>
         </TouchableOpacity>
       </DescriptionBottomSheet>
     </>
-  )
+  );
 };
 
 const ExistProfile = (props) => {
-  const { navigation, setIsLoading, userRef, user, userType } = props;
+  const {navigation, setIsLoading, userRef, user, userType} = props;
 
   const [removeModalVisible, setRemoveModalVisible] = React.useState(false);
 
   return (
     <ImageBackground
-    style={styles.imageBackground}
-    source={{ uri : user.imageURI }}>
-      <ProfileModal 
+      style={styles.imageBackground}
+      source={{uri: user.imageURI}}>
+      <ProfileModal
         name={user.name}
         userRef={userRef}
         removeModalVisible={removeModalVisible}
@@ -117,53 +125,67 @@ const ExistProfile = (props) => {
       />
 
       <View style={styles.topBar}>
-        <Icon style={styles.image} name='image' size={48} onPress={() => {
-          navigation.navigate('Gallery');
-        }} />
+        <Icon
+          style={styles.image}
+          name="image"
+          size={48}
+          onPress={() => {
+            navigation.navigate('Gallery');
+          }}
+        />
       </View>
 
-      <DescriptionBottomSheet
-        snapPoints={[88, SCREEN_HEIGHT - 198]}>
-        <View></View>
+      <DescriptionBottomSheet snapPoints={[88, SCREEN_HEIGHT - 198]}>
+        <View />
         <View style={styles.topDesc}>
           <View style={styles.leftDesc}>
-            <Text style={styles.boldText} numberOfLines={1}>{ user.name }</Text>
+            <Text style={styles.boldText} numberOfLines={1}>
+              {user.name}
+            </Text>
             <View style={styles.flexEnd}>
-              <Text style={styles.normalText}>{ user.subcategory }</Text>
-              <Text style={styles.thinText}>{ user.province }, { user.city }</Text>
+              <Text style={styles.normalText}>{user.subcategory}</Text>
+              <Text style={styles.thinText}>
+                {user.province}, {user.city}
+              </Text>
             </View>
           </View>
           <View style={styles.rightDesc}>
             <Text style={styles.boldText}>Price</Text>
-            <Text style={styles.normalText}>~ Rp. { user.price }</Text>
+            <Text style={styles.normalText}>~ Rp. {user.price}</Text>
           </View>
         </View>
         <Text style={styles.descText}>Description</Text>
-        <Text style={styles.desc}>{ user.description }</Text>
+        <Text style={styles.desc}>{user.description}</Text>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.createButton}
             activeOpacity={0.8}
-            underlayColor='#DF6D4F'
-            onPress={() => { navigation.navigate('ProfileUpdate', {
-              userType: userType,
-              user: user,
-            }); }}>
+            underlayColor="#DF6D4F"
+            onPress={() => {
+              navigation.navigate('ProfileUpdate', {
+                userType: userType,
+                user: user,
+              });
+            }}>
             <Text style={styles.buttonText}>Update Profil</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.removeButton}
             activeOpacity={0.8}
-            underlayColor='#DF0000'
-            onPress={() => { setRemoveModalVisible(true); }}>
+            underlayColor="#DF0000"
+            onPress={() => {
+              setRemoveModalVisible(true);
+            }}>
             <Text style={styles.removeButtonText}>Hapus Profil</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.logoutButton}
             activeOpacity={0.8}
-            underlayColor='#F2F2F2'
-            onPress={() => { auth().signOut(); }}>
+            underlayColor="#F2F2F2"
+            onPress={() => {
+              auth().signOut();
+            }}>
             <Text style={styles.buttonText}>Keluar</Text>
           </TouchableOpacity>
         </View>
@@ -173,38 +195,44 @@ const ExistProfile = (props) => {
 };
 
 const ProfileModal = (props) => {
-  const { name, userRef, removeModalVisible, setRemoveModalVisible, setIsLoading } = props;
+  const {
+    name,
+    userRef,
+    removeModalVisible,
+    setRemoveModalVisible,
+    setIsLoading,
+  } = props;
 
   return (
-    <Modal
-        animationType='fade'
-        transparent={true}
-        visible={removeModalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.boldModalText}>Apakah anda yakin ingin menghapus profil bernama {name}?</Text>
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                style={styles.cancelModalButton}
-                onPress={() => { setRemoveModalVisible(false); }}>
-                <Text style={styles.removeButtonText}>Batal</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.acceptModalButton}
-                onPress={() => {
-                  setIsLoading(true);
-                  userRef.remove();
-                  FinishedDeleteProfileNotification();
-                  setRemoveModalVisible(false);
-                }}>
-                <Text style={styles.buttonText}>OK</Text>
-              </TouchableOpacity>
-            </View>
+    <Modal animationType="fade" transparent={true} visible={removeModalVisible}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.boldModalText}>
+            Apakah anda yakin ingin menghapus profil bernama {name}?
+          </Text>
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={styles.cancelModalButton}
+              onPress={() => {
+                setRemoveModalVisible(false);
+              }}>
+              <Text style={styles.removeButtonText}>Batal</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.acceptModalButton}
+              onPress={() => {
+                setIsLoading(true);
+                userRef.remove();
+                setRemoveModalVisible(false);
+              }}>
+              <Text style={styles.buttonText}>OK</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </View>
+    </Modal>
   );
-}
+};
 
 export default ProfileScreen;
 
@@ -217,7 +245,7 @@ const styles = StyleSheet.create({
   noImage: {
     marginTop: (SCREEN_HEIGHT - 94 - 128 - 48) / 2,
     color: '#FFFFFF',
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowOffset: {width: 0, height: 0},
     textShadowColor: '#A2A2A2',
     textShadowRadius: 16,
   },
@@ -227,7 +255,7 @@ const styles = StyleSheet.create({
   image: {
     margin: 16,
     color: '#FFFFFF',
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowOffset: {width: 0, height: 0},
     textShadowColor: '#A2A2A2',
     textShadowRadius: 16,
   },
@@ -344,7 +372,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
   modalView: {
-    width: SCREEN_WIDTH * 2 / 3,
+    width: (SCREEN_WIDTH * 2) / 3,
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 25,

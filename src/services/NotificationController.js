@@ -2,14 +2,14 @@ import notifee, { TimestampTrigger, TriggerType, AndroidBadgeIconType, AndroidCo
 
 const FinishedDownloadNotification = async () => {
   await notifee.displayNotification({
-    title: '<p style="color: #000080"><b>Download Completed</b></p> &#128229;',
+    title: '<p><b>Download Completed</b></p>',
     android: {
       channelId: 'download-channel-id',
       smallIcon: 'ic_launcher_round',
       importance: AndroidImportance.HIGH,
       style: {
         type: AndroidStyle.BIGTEXT,
-        text: 'Your download is completed, press the <b>gallery</b> button below to open gallery &#128071;&#128071;&#128071;',
+        text: 'Your download is completed, press the <b>gallery</b> button below to open gallery.',
       },
       actions: [
         {

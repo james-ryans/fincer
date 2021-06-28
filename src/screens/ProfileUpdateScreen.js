@@ -1,21 +1,31 @@
 import * as React from 'react';
-import { StyleSheet, ImageBackground, Modal, Button, View, Text, TextInput, Dimensions, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import {
+  StyleSheet,
+  ImageBackground,
+  Modal,
+  Button,
+  View,
+  Text,
+  TextInput,
+  Dimensions,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
 import * as ImagePicker from 'react-native-image-picker';
-import { Picker } from '@react-native-picker/picker';
-import { ErrorMessage, Formik } from 'formik';
+import {Picker} from '@react-native-picker/picker';
+import {ErrorMessage, Formik} from 'formik';
 import * as Yup from 'yup';
 import DescriptionBottomSheet from '../components/DescriptionBottomSheet';
-import { ReminderTimerNotification, FinishedCreateProfileNotification } from '../services/NotificationController';
 
-const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('screen');
+const {height: SCREEN_HEIGHT, width: SCREEN_WIDTH} = Dimensions.get('screen');
 
 const ProfileUpdateScreen = (props) => {
-  const { navigation, route } = props;
+  const {navigation, route} = props;
 
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -24,8 +34,6 @@ const ProfileUpdateScreen = (props) => {
   const [user, setUser] = React.useState(route.params?.user);
 
   const [categories, setCategories] = React.useState();
-
-  const [timerModalVisible, setTimerModalVisible] = React.useState(false);
 
   React.useEffect(() => {
     let isSubscribed = user === undefined;
@@ -38,7 +46,9 @@ const ProfileUpdateScreen = (props) => {
         });
     }
 
-    return () => { isSubscribed = false; };
+    return () => {
+      isSubscribed = false;
+    };
   }, [userType]);
 
   React.useEffect(() => {
@@ -60,18 +70,28 @@ const ProfileUpdateScreen = (props) => {
         });
     }
 
-    return () => { isSubscribed = false; };
+    return () => {
+      isSubscribed = false;
+    };
   }, [userId, userType]);
 
   React.useEffect(() => {
     let isSubscribed = true;
     if (isSubscribed) {
-      setIsLoading(user === undefined || categories === undefined || categories.length === 0);
+      setIsLoading(
+        user === undefined ||
+          categories === undefined ||
+          categories.length === 0,
+      );
     }
-    return () => { isSubscribed = false; };
+    return () => {
+      isSubscribed = false;
+    };
   }, [user, categories]);
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <Formik
@@ -90,21 +110,15 @@ const ProfileUpdateScreen = (props) => {
         name: Yup.string()
           .min(4, 'Must be 4 characters or more')
           .required('Required'),
-        imageURI: Yup.string()
-          .required('Required'),
-        category: Yup.string()
-          .required('Required'),
-        subcategory: Yup.string()
-          .required('Required'),
-        city: Yup.string()
-          .required('Required'),
-        province: Yup.string()
-          .required('Required'),
+        imageURI: Yup.string().required('Required'),
+        category: Yup.string().required('Required'),
+        subcategory: Yup.string().required('Required'),
+        city: Yup.string().required('Required'),
+        province: Yup.string().required('Required'),
         price: Yup.number('Price must be a number')
           .moreThan(0, 'Price must greater than 0')
           .required('Required'),
-        description: Yup.string()
-          .required('Required'),
+        description: Yup.string().required('Required'),
       })}
       onSubmit={(values, actions) => {
         const imageType = values.imageURI.split('.').pop().split('?').shift();
@@ -123,12 +137,16 @@ const ProfileUpdateScreen = (props) => {
             .then((url) => {
               if (user) {
                 database()
-                  .ref(`/categories/${userType}/${user.category}/members/${userId}`)
+                  .ref(
+                    `/categories/${userType}/${user.category}/members/${userId}`,
+                  )
                   .remove();
               }
 
               database()
-                .ref(`/categories/${userType}/${values.category}/members/${userId}`)
+                .ref(
+                  `/categories/${userType}/${values.category}/members/${userId}`,
+                )
                 .set(true);
 
               database()
@@ -145,13 +163,10 @@ const ProfileUpdateScreen = (props) => {
                 })
                 .then(() => {
                   actions.setSubmitting(false);
-                  FinishedCreateProfileNotification();
                   navigation.navigate('Profile');
                 });
             })
-            .catch((err) => {
-              setTimerModalVisible(true);
-            });
+            .catch((err) => {});
         };
 
         if (!values.imageURI.startsWith('http')) {
@@ -160,53 +175,62 @@ const ProfileUpdateScreen = (props) => {
           databasePutData();
         }
       }}>
-      {formik => (
+      {(formik) => (
         <View style={styles.container}>
           <ImageBackground
             style={styles.imageBackground}
-            source={{ uri : formik.values.imageURI == '' ? null : formik.values.imageURI }}>
-            <TimerModal
-              timerModalVisible={timerModalVisible}
-              setTimerModalVisible={setTimerModalVisible}
-              navigation={navigation}
-            />
-
+            source={{
+              uri: formik.values.imageURI == '' ? null : formik.values.imageURI,
+            }}>
             <TouchableWithoutFeedback
-              onPress={() => { navigation.navigate('Profile') }}>
-              <Icon style={styles.backIcon} name='arrow-left' size={32} />
+              onPress={() => {
+                navigation.navigate('Profile');
+              }}>
+              <Icon style={styles.backIcon} name="arrow-left" size={32} />
             </TouchableWithoutFeedback>
             <View style={styles.centerContainer}>
               <TouchableWithoutFeedback
                 onPress={() => {
-                  ImagePicker.launchImageLibrary({
-                    noData: true,
-                  }, (response) => {
-                    formik.setFieldTouched('imageURI', true);
-                    if (!response.didCancel && response.fileSize <= 5 * 1024 * 1024 && response.errorCode == null) {
-                      formik.setFieldValue('imageURI', response.uri);
-                    }
-                  });
+                  ImagePicker.launchImageLibrary(
+                    {
+                      noData: true,
+                    },
+                    (response) => {
+                      formik.setFieldTouched('imageURI', true);
+                      if (
+                        !response.didCancel &&
+                        response.fileSize <= 5 * 1024 * 1024 &&
+                        response.errorCode == null
+                      ) {
+                        formik.setFieldValue('imageURI', response.uri);
+                      }
+                    },
+                  );
                 }}>
-                <MaterialCommunityIcon style={styles.addImage} name='camera-plus' size ={48} />
+                <MaterialCommunityIcon
+                  style={styles.addImage}
+                  name="camera-plus"
+                  size={48}
+                />
               </TouchableWithoutFeedback>
-              { formik.touched.imageURI && formik.errors.imageURI &&
-                <Text style={styles.errorText}>{ formik.errors.imageURI }</Text>
-              }
+              {formik.touched.imageURI && formik.errors.imageURI && (
+                <Text style={styles.errorText}>{formik.errors.imageURI}</Text>
+              )}
             </View>
           </ImageBackground>
-    
-          <DescriptionBottomSheet
-            snapPoints={[100, SCREEN_HEIGHT - 132]}>
+
+          <DescriptionBottomSheet snapPoints={[100, SCREEN_HEIGHT - 132]}>
             <TextInput
-              style={{ ...styles.textInput, marginTop: 32 }}
-              placeholder='Nama'
-              placeholderTextColor='#4F4F4F'
+              style={{...styles.textInput, marginTop: 32}}
+              placeholder="Nama"
+              placeholderTextColor="#4F4F4F"
               onChangeText={formik.handleChange('name')}
               onBlur={formik.handleBlur('name')}
-              value={formik.values.name}/>
-            { formik.touched.name && formik.errors.name &&
-              <Text style={styles.errorText}>{ formik.errors.name }</Text>
-            }
+              value={formik.values.name}
+            />
+            {formik.touched.name && formik.errors.name && (
+              <Text style={styles.errorText}>{formik.errors.name}</Text>
+            )}
 
             <View style={styles.pickerContainer}>
               <Picker
@@ -216,71 +240,82 @@ const ProfileUpdateScreen = (props) => {
                 onValueChange={(itemValue) => {
                   formik.setFieldValue('category', itemValue);
                 }}>
-                { categories.map((item, index) => {
-                  return <Picker.Item key={index} label={item.label} value={item.value} />
+                {categories.map((item, index) => {
+                  return (
+                    <Picker.Item
+                      key={index}
+                      label={item.label}
+                      value={item.value}
+                    />
+                  );
                 })}
-              </Picker> 
+              </Picker>
             </View>
-            { formik.touched.category && formik.errors.category &&
-              <Text style={styles.errorText}>{ formik.errors.category }</Text>
-            }
+            {formik.touched.category && formik.errors.category && (
+              <Text style={styles.errorText}>{formik.errors.category}</Text>
+            )}
 
             <TextInput
               style={styles.textInput}
-              placeholder='Sub Kategori'
-              placeholderTextColor='#4F4F4F'
+              placeholder="Sub Kategori"
+              placeholderTextColor="#4F4F4F"
               onChangeText={formik.handleChange('subcategory')}
               onBlur={formik.handleBlur('subcategory')}
-              value={formik.values.subcategory}/>
-            { formik.touched.subcategory && formik.errors.subcategory &&
-              <Text style={styles.errorText}>{ formik.errors.subcategory }</Text>
-            }
+              value={formik.values.subcategory}
+            />
+            {formik.touched.subcategory && formik.errors.subcategory && (
+              <Text style={styles.errorText}>{formik.errors.subcategory}</Text>
+            )}
 
             <TextInput
               style={styles.textInput}
-              placeholder='Kota'
-              placeholderTextColor='#4F4F4F'
+              placeholder="Kota"
+              placeholderTextColor="#4F4F4F"
               onChangeText={formik.handleChange('city')}
               onBlur={formik.handleBlur('city')}
-              value={formik.values.city}/>
-            { formik.touched.city && formik.errors.city &&
-              <Text style={styles.errorText}>{ formik.errors.city }</Text>
-            }
+              value={formik.values.city}
+            />
+            {formik.touched.city && formik.errors.city && (
+              <Text style={styles.errorText}>{formik.errors.city}</Text>
+            )}
 
             <TextInput
               style={styles.textInput}
-              placeholder='Provinsi'
-              placeholderTextColor='#4F4F4F'
+              placeholder="Provinsi"
+              placeholderTextColor="#4F4F4F"
               onChangeText={formik.handleChange('province')}
               onBlur={formik.handleBlur('province')}
-              value={formik.values.province}/>
-            { formik.touched.province && formik.errors.province &&
-              <Text style={styles.errorText}>{ formik.errors.province }</Text>
-            }
+              value={formik.values.province}
+            />
+            {formik.touched.province && formik.errors.province && (
+              <Text style={styles.errorText}>{formik.errors.province}</Text>
+            )}
 
             <TextInput
               style={styles.textInput}
-              keyboardType='numeric'
-              placeholder='Harga'
-              placeholderTextColor='#4F4F4F'
+              keyboardType="numeric"
+              placeholder="Harga"
+              placeholderTextColor="#4F4F4F"
               onChangeText={formik.handleChange('price')}
               onBlur={formik.handleBlur('price')}
-              value={formik.values.price}/>
-            { formik.touched.price && formik.errors.price &&
-              <Text style={styles.errorText}>{ formik.errors.price }</Text>
-            }
+              value={formik.values.price}
+            />
+            {formik.touched.price && formik.errors.price && (
+              <Text style={styles.errorText}>{formik.errors.price}</Text>
+            )}
 
             <TextInput
               multiline={true}
               style={{...styles.textInput, height: 256}}
-              placeholder='Deskripsi'
-              placeholderTextColor='#4F4F4F'
+              placeholder="Deskripsi"
+              placeholderTextColor="#4F4F4F"
               onChangeText={formik.handleChange('description')}
               onBlur={formik.handleBlur('description')}
-              value={formik.values.description}/>
-            { formik.touched.description && formik.errors.description &&
-              <Text style={styles.errorText}>{ formik.errors.description }</Text>
-            }
+              value={formik.values.description}
+            />
+            {formik.touched.description && formik.errors.description && (
+              <Text style={styles.errorText}>{formik.errors.description}</Text>
+            )}
 
             <View style={styles.buttonView}>
               <TouchableOpacity
@@ -304,88 +339,8 @@ const ProfileUpdateScreen = (props) => {
         </View>
       )}
     </Formik>
-  )
-};
-
-const TimerModal = (props) => {
-  const { timerModalVisible, setTimerModalVisible, navigation } = props;
-
-  const [hour, setHour] = React.useState(0);
-  const [minute, setMinute] = React.useState(0);
-
-  const onSetHour = (text) => {
-    if (text !== '' && !Number.isNaN(text)) {
-      setHour(Math.min(23, Math.max(0, parseInt(text))));
-    } else {
-      setHour(0);
-    }
-  };
-
-  const onSetMinute = (text) => {
-    if (text !== '' && !Number.isNaN(text)) {
-      setMinute(Math.min(59, Math.max(0, parseInt(text))));
-    } else {
-      setMinute(0);
-    }
-  };
-
-  return (
-    <Modal
-        animationType='fade'
-        transparent={true}
-        visible={timerModalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.boldModalText}>Internet anda tampaknya sedang lambat.</Text>
-            <Text>Cobalah beberapa saat lagi.</Text>
-            <Text></Text>
-            <Text>Mungkin anda membutuhkan alarm pengingat?</Text>
-
-            <View style={styles.rowView}>
-              <View>
-                <TextInput
-                  style={styles.timeTextInput}
-                  textAlign='center'
-                  keyboardType='numeric'
-                  placeholderTextColor='#4F4F4F'
-                  onChangeText={onSetHour}
-                  value={hour.toString()}/>
-                <Text>Jam</Text>
-              </View>
-
-              <View>
-                <TextInput
-                  style={styles.timeTextInput}
-                  textAlign='center'
-                  keyboardType='numeric'
-                  placeholderTextColor='#4F4F4F'
-                  onChangeText={onSetMinute}
-                  value={minute.toString()}/>
-                <Text>Menit</Text>
-              </View>
-            </View>
-
-            <View style={styles.buttonRow}>
-              <TouchableOpacity
-                style={styles.cancelModalButton}
-                onPress={() => { setTimerModalVisible(false); }}>
-                <Text style={styles.removeButtonText}>Batal</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.acceptModalButton}
-                onPress={() => {
-                  setTimerModalVisible(false);
-                  ReminderTimerNotification(hour, minute);
-                  navigation.navigate('Profile');
-                }}>
-                <Text style={styles.buttonText}>OK</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
   );
-}
+};
 
 export default ProfileUpdateScreen;
 
@@ -397,7 +352,7 @@ const styles = StyleSheet.create({
   centerContainer: {
     flex: 1,
     alignSelf: 'center',
-    marginTop: (SCREEN_HEIGHT) / 2 - 100 - 48,
+    marginTop: SCREEN_HEIGHT / 2 - 100 - 48,
   },
   rowView: {
     flexDirection: 'row',
@@ -419,7 +374,7 @@ const styles = StyleSheet.create({
   addImage: {
     alignSelf: 'center',
     color: '#FFFFFF',
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowOffset: {width: 0, height: 0},
     textShadowColor: '#A2A2A2',
     textShadowRadius: 16,
   },
@@ -430,7 +385,7 @@ const styles = StyleSheet.create({
   backIcon: {
     margin: 16,
     color: '#FFFFFF',
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowOffset: {width: 0, height: 0},
     textShadowColor: '#A2A2A2',
     textShadowRadius: 16,
   },
@@ -504,7 +459,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.6)',
   },
   modalView: {
-    width: SCREEN_WIDTH * 4 / 5,
+    width: (SCREEN_WIDTH * 4) / 5,
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 25,
