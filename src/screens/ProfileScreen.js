@@ -123,18 +123,6 @@ const ExistProfile = (props) => {
         setRemoveModalVisible={setRemoveModalVisible}
         setIsLoading={setIsLoading}
       />
-
-      <View style={styles.topBar}>
-        <Icon
-          style={styles.image}
-          name="image"
-          size={48}
-          onPress={() => {
-            navigation.navigate('Gallery');
-          }}
-        />
-      </View>
-
       <DescriptionBottomSheet snapPoints={[88, SCREEN_HEIGHT - 198]}>
         <View />
         <View style={styles.topDesc}>
